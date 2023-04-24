@@ -1,0 +1,39 @@
+import os
+import json
+import gptop
+from gptop import OperationUtils
+
+gptop.init(
+    openai_key=os.getenv("OPENAI_API_KEY"),
+    pinecone_key=os.getenv("PINECONE_API_KEY"),
+    pinecone_region=os.getenv("PINECONE_REGION"),
+    pinecone_index=os.getenv("PINECONE_INDEX")
+)
+
+
+def main():
+    for subdir, dirs, files in os.walk("./operations"):
+        for file in files:
+            file_path = subdir + os.sep + file
+
+            if file_path.endswith(".json"):
+                print("Uploading operation at", file_path)
+                file = open(file_path, "r")
+                obj = file.read()
+                obj = json.loads(obj)
+                file.close()
+
+                namespace = obj.get("namespace")
+                id = obj.get("id")
+                type = obj.get("type")
+                name = obj.get("name")
+                description = obj.get("description")
+                url = obj.get("url")
+                path = obj.get("path")
+                auth = obj.get("auth")
+                schema = json.dumps(obj.get("schema"), separators=(',', ': '))
+
+                OperationUtils.update_operation(namespace, type, name, description, url, path, auth, schema)
+
+if __name__ == "__main__":
+    main()
