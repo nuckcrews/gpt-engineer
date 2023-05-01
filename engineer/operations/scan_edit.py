@@ -1,5 +1,6 @@
 
 import os
+import os.path
 from openai import ChatCompletion
 from gptop import Operation
 from gptop.utils import llm_json
@@ -35,29 +36,47 @@ class ScanEdit(Operation):
 
 
 def scan_edit(goal: str, path: str, full_scan: bool):
-    for root, _, files in os.walk(path):
-        for file_name in files:
-            file_path = os.path.join(root, file_name)
+    if os.path.isfile(path):
+        file = open(path, "r")
+        content = file.read()
+        file.close()
 
-            file = open(file_path, "r")
-            content = file.read()
-            file.close()
+        refactored_content = refactor(
+            goal=goal,
+            file_name=path,
+            content=content
+        )
 
-            refactored_content = refactor(
-                goal=goal,
-                content=content
-            )
+        file = open(path, "w")
+        file.write(refactored_content)
+        file.close()
 
-            file = open(file_path, "w")
-            file.write(refactored_content)
-            file.close()
+        announce(path, prefix="Refactored: ")
+    else:
+        for root, _, files in os.walk(path):
+            for file_name in files:
+                file_path = os.path.join(root, file_name)
 
-            announce(file_name, prefix="Refactored: ")
+                file = open(file_path, "r")
+                content = file.read()
+                file.close()
 
-        if not full_scan: break
+                refactored_content = refactor(
+                    goal=goal,
+                    file_name=file_name,
+                    content=content
+                )
+
+                file = open(file_path, "w")
+                file.write(refactored_content)
+                file.close()
+
+                announce(file_name, prefix="Refactored: ")
+
+            if not full_scan: break
 
 
-def refactor(goal: str, content):
+def refactor(goal: str, file_name: str, content):
     response = ChatCompletion.create(
         model="gpt-4",
         messages=[
@@ -65,6 +84,7 @@ def refactor(goal: str, content):
             {"role": "system", "content": "Output only the new content as it will be written into the file."},
             {"role": "system", "content": "If the file does not need changes, just output the existing content."},
             {"role": "system", "content": f"Goal: {goal}"},
+            {"role": "system", "content": f"File Name: {file_name}"},
             {"role": "user", "content": content}
         ],
         temperature=0.0

@@ -6,11 +6,10 @@ temp_path = "./tmp"
 
 
 def main():
-    repo = prompt_string(
-        "Repository URL:", default="git@github.com:ncrews35/gpt-operator.git")
+    repo = prompt_string("Repository URL:")
     base_branch = prompt_string("Base Branch:", default="mainline")
     dev_branch = prompt_string("Development Branch:", default="gpt-eng")
-    path = prompt_string("Path to directory:", default="/")
+    path = prompt_string("Path to directory/file:", default="/")
     full_scan = prompt_confirm("Should I do a full scan?")
     goal = prompt_string("Goal:")
 
