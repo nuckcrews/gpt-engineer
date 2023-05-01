@@ -1,0 +1,8 @@
+{
+    "id": "exit_operation_1",
+    "type": "EXIT",
+    "name": "Exits Task",
+    "description": "Exits the current task to terminate the job.",
+    "metadata": {},
+    "schema": {}
+}

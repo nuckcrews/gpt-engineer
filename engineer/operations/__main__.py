@@ -1,18 +1,18 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import os
 import json
-import gptop
 from gptop import OperationUtils
 
-gptop.init(
-    openai_key=os.getenv("OPENAI_API_KEY"),
-    pinecone_key=os.getenv("PINECONE_API_KEY"),
-    pinecone_region=os.getenv("PINECONE_REGION"),
-    pinecone_index=os.getenv("PINECONE_INDEX")
-)
-
+namespace = "engineer"
 
 def main():
-    for subdir, dirs, files in os.walk("./operations"):
+    OperationUtils.remove_namespace(namespace=namespace)
+    print("Cleared namespace:", namespace)
+
+    for subdir, dirs, files in os.walk("./engineer/operations/manifests"):
         for file in files:
             file_path = subdir + os.sep + file
 
@@ -23,17 +23,17 @@ def main():
                 obj = json.loads(obj)
                 file.close()
 
-                namespace = obj.get("namespace")
                 id = obj.get("id")
                 type = obj.get("type")
                 name = obj.get("name")
                 description = obj.get("description")
-                url = obj.get("url")
-                path = obj.get("path")
-                auth = obj.get("auth")
+                metadata = json.dumps(
+                    obj.get("metadata"), separators=(',', ': '))
                 schema = json.dumps(obj.get("schema"), separators=(',', ': '))
 
-                OperationUtils.update_operation(namespace, type, name, description, url, path, auth, schema)
+                OperationUtils.update_operation(namespace, id, type, name,
+                                                description, metadata, schema)
+
 
 if __name__ == "__main__":
     main()

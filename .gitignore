@@ -21,3 +21,5 @@ build/
 data/
 
 *.keys.*
+
+tmp/
