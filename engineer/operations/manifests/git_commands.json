@@ -1,0 +1,25 @@
+{
+    "id": "clone_operation_1",
+    "type": "COMMAND",
+    "name": "Git Commands",
+    "description": "Runs git commands.",
+    "metadata": {
+        "clone": "git clone <GIT_REPOSITORY>",
+        "commit": "git commit -m <COMMIT_MESSAGE>",
+        "add": "git add .",
+        "push": "git push origin <BRANCH_NAME>"
+    },
+    "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "command": {
+                "type": "string",
+                "description": "The full command to execute."
+            }
+        },
+        "required": [
+            "command"
+        ]
+    }
+}

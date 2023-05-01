@@ -1,0 +1,22 @@
+{
+    "id": "cli_operation_1",
+    "type": "COMMAND",
+    "name": "CLI Commands",
+    "description": "Runs CLI commands.",
+    "metadata": {
+        "cd": "git <PATH>"
+    },
+    "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "command": {
+                "type": "string",
+                "description": "The full command to execute."
+            }
+        },
+        "required": [
+            "command"
+        ]
+    }
+}
