@@ -13,6 +13,6 @@ exclude:
 - gptop.egg-info
 - build
 - dist
-- *.keys
-- *.pyc
+- "*.keys"
+- "*.pyc"
 - venv/
