@@ -1,8 +1,9 @@
 import subprocess
 from .operations.scan_edit import scan_edit
 from .utils import prompt_string, prompt_confirm
+from .config import RepoConfig
 
-temp_path = "./tmp"
+temp_path = "./tmp/repo"
 
 
 def main():
@@ -16,14 +17,14 @@ def main():
     print("GETTING READY")
 
     subprocess.run(
-        f"rm -r {temp_path}/repo",
+        f"rm -r {temp_path}",
         shell=True,
         stdout=subprocess.PIPE
     )
     subprocess.run(
         script([
-            f"git clone {repo} {temp_path}/repo",
-            f"cd {temp_path}/repo",
+            f"git clone {repo} " + temp_path,
+            f"cd {temp_path}",
             f"git fetch",
             f"git checkout {base_branch}",
             f"git pull origin {base_branch}",
@@ -35,17 +36,22 @@ def main():
 
     print("STARTING SCAN")
 
+    config = RepoConfig(temp_path)
+
     scan_edit(
         goal=goal,
-        path=temp_path + "/repo" + path,
-        full_scan=full_scan
+        path=temp_path + path,
+        full_scan=full_scan,
+        repo_name=config.name,
+        repo_description=config.description,
+        exclude=config.exclude
     )
 
     print("FINISHED SCAN")
 
     subprocess.run(
         script([
-            f"cd {temp_path}/repo",
+            f"cd {temp_path}",
             f"git add .",
             "git commit -m '[GPT] Generated Suggestions\n## Goal\n{0}\n\n#### Path: {1}'".format(
                 goal, path),

@@ -35,7 +35,7 @@ class ScanEdit(Operation):
         return "Scan and edit complete"
 
 
-def scan_edit(goal: str, path: str, full_scan: bool):
+def scan_edit(goal: str, path: str, full_scan: bool, repo_name: str = None, repo_description: str = None, exclude: list[str]=[]):
     if os.path.isfile(path):
         file = open(path, "r")
         content = file.read()
@@ -44,7 +44,9 @@ def scan_edit(goal: str, path: str, full_scan: bool):
         refactored_content = refactor(
             goal=goal,
             file_name=path,
-            content=content
+            content=content,
+            repo_name=repo_name,
+            repo_description=repo_description
         )
 
         file = open(path, "w")
@@ -64,7 +66,9 @@ def scan_edit(goal: str, path: str, full_scan: bool):
                 refactored_content = refactor(
                     goal=goal,
                     file_name=file_name,
-                    content=content
+                    content=content,
+                    repo_name=repo_name,
+                    repo_description=repo_description
                 )
 
                 file = open(file_path, "w")
@@ -73,20 +77,37 @@ def scan_edit(goal: str, path: str, full_scan: bool):
 
                 announce(file_name, prefix="Refactored: ")
 
-            if not full_scan: break
+            if not full_scan:
+                break
 
 
-def refactor(goal: str, file_name: str, content):
-    response = ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Given content from a file in a codebase, re-write it to work towards the provided goal."},
+def refactor(goal: str, file_name: str, content, repo_name: str = None, repo_description: str = None):
+
+    messages = []
+
+    if repo_name and repo_description:
+        messages.append({
+            "role": "system",
+            "content": "Repository Name: {0}; Repository Description: {1};".format(
+                repo_name,
+                repo_description
+            )
+        })
+
+    messages.extend(
+        [
+            {"role": "system", "content": "Given content from a file in the repository, re-write it to work towards the provided goal."},
             {"role": "system", "content": "Output only the new content as it will be written into the file."},
             {"role": "system", "content": "If the file does not need changes, just output the existing content."},
             {"role": "system", "content": f"Goal: {goal}"},
             {"role": "system", "content": f"File Name: {file_name}"},
             {"role": "user", "content": content}
-        ],
+        ]
+    )
+
+    response = ChatCompletion.create(
+        model="gpt-4",
+        messages=messages,
         temperature=0.0
     )
 
