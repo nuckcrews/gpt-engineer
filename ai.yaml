@@ -1,0 +1,18 @@
+name: GPT Engineer
+
+description: A CLI command tool that scans your codebase and edits the files based on the goals you provide it.
+
+languages:
+- python
+
+exclude:
+- LICENSE
+- requirements.txt
+- .gitignore
+- .env.example
+- gptop.egg-info
+- build
+- dist
+- *.keys
+- *.pyc
+- venv/

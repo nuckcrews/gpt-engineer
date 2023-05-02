@@ -3,6 +3,7 @@
         "cmds",
         "dotenv",
         "GPTOP",
+        "venv",
         "virt",
         "virtualenv"
     ]
