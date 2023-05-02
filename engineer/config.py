@@ -1,4 +1,5 @@
 import yaml
+import json
 
 class RepoConfig:
 
@@ -9,3 +10,6 @@ class RepoConfig:
             self.description = config.get("description")
             self.languages = config.get("languages")
             self.exclude = config.get("exclude")
+
+    def __repr__(self) -> str:
+        return json.dumps(self.__dict__)

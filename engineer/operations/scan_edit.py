@@ -59,6 +59,9 @@ def scan_edit(goal: str, path: str, full_scan: bool, repo_name: str = None, repo
             for file_name in files:
                 file_path = os.path.join(root, file_name)
 
+                if any([file_path.startswith(exclude_item) for exclude_item in exclude]):
+                    continue
+
                 file = open(file_path, "r")
                 content = file.read()
                 file.close()

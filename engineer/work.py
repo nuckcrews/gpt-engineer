@@ -17,7 +17,7 @@ def main():
     print("GETTING READY")
 
     subprocess.run(
-        f"rm -r {temp_path}",
+        f"rm -r -f {temp_path}",
         shell=True,
         stdout=subprocess.PIPE
     )
