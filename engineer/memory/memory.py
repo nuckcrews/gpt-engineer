@@ -16,14 +16,7 @@ class Memory:
 
     def upload(self, path: str):
         if os.path.isfile(path):
-            file = open(path, "r")
-            content = file.read()
-            file.close()
-
-            emb_content = f"Path: {path}; " + f" Content: {content};"
-
-            self.upload_file(path, content=emb_content)
-            announce(path, prefix="Stored: ")
+            self.process_file(path)
         else:
             for root, _, files in os.walk(path):
                 for file_name in files:
@@ -32,14 +25,15 @@ class Memory:
                     if any([file_path.startswith(exclude_item) for exclude_item in self.exclude]):
                         continue
 
-                    file = open(file_path, "r")
-                    content = file.read()
-                    file.close()
+                    self.process_file(file_path)
 
-                    emb_content = f"Path: {file_path}; " + f" Content: {content};"
+    def process_file(self, file_path: str):
+        with open(file_path, "r") as file:
+            content = file.read()
 
-                    self.upload_file(file_path, content=emb_content)
-                    announce(file_path, prefix="Stored: ")
+        emb_content = f"Path: {file_path}; " + f" Content: {content};"
+        self.upload_file(file_path, content=emb_content)
+        announce(file_path, prefix="Stored: ")
 
     def upload_file(self, path: str, content: any):
         embedding = get_embedding(content,
@@ -61,4 +55,6 @@ class Memory:
 
         return result.get("matches")
 
-
+    def clear_memory(self):
+        self.index.delete_namespace(namespace=self.namespace)
+        announce("Memory cleared.", prefix="Info: ")
