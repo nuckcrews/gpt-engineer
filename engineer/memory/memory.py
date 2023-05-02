@@ -3,6 +3,9 @@ import pinecone
 from openai.embeddings_utils import get_embedding
 from engineer.utils import announce
 
+__all__ = [
+    "Memory"
+]
 
 class Memory:
 
@@ -17,7 +20,9 @@ class Memory:
             content = file.read()
             file.close()
 
-            self.upload_file(path, content=content)
+            emb_content = f"Path: {path}; " + f" Content: {content};"
+
+            self.upload_file(path, content=emb_content)
             announce(path, prefix="Stored: ")
         else:
             for root, _, files in os.walk(path):
@@ -31,7 +36,9 @@ class Memory:
                     content = file.read()
                     file.close()
 
-                    self.upload_file(file_path, content=content)
+                    emb_content = f"Path: {file_path}; " + f" Content: {content};"
+
+                    self.upload_file(file_path, content=emb_content)
                     announce(file_path, prefix="Stored: ")
 
     def upload_file(self, path: str, content: any):

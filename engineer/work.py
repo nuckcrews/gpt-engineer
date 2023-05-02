@@ -2,6 +2,7 @@ import subprocess
 from .operations.scan_edit import scan_edit
 from .utils import prompt_string, prompt_confirm
 from .config import RepoConfig
+from .memory import Memory
 
 temp_path = "./tmp/repo"
 
@@ -37,6 +38,9 @@ def main():
     print("STARTING SCAN")
 
     config = RepoConfig(temp_path)
+
+    memory = Memory("engineer", exclude=config.exclude)
+    memory.upload(temp_path + path)
 
     scan_edit(
         goal=goal,
