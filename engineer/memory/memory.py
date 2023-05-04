@@ -56,5 +56,5 @@ class Memory:
         return result.get("matches")
 
     def clear_memory(self):
-        self.index.delete_namespace(namespace=self.namespace)
+        self.index.delete(deleteAll='true', namespace=self.namespace)
         announce("Memory cleared.", prefix="Info: ")
