@@ -8,7 +8,7 @@ from .utils import *
 
 __all__ = ["File", "Extractor"]
 
-
+# Class to handle file related operations
 class File():
 
     def __init__(self, path: str, name: str, content: str):
@@ -26,8 +26,7 @@ class File():
     def diff(self):
         return subprocess.check_output(["git", "diff", self.path]).decode("utf-8")
 
-
-
+# Class to handle extraction related operations
 class Extractor():
 
     def __init__(self, path: str, exclude_list: list = []):

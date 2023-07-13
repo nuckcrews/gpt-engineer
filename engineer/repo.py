@@ -5,8 +5,10 @@ __all__ = [
     "RepoConfig"
 ]
 
+# Class RepoConfig is used to manage the configuration of the repository.
 class RepoConfig():
 
+    # The constructor method initializes the configuration of the repository.
     def __init__(self, path: str):
         with open(path + "/ai.yaml", 'r') as file:
             config = yaml.safe_load(file)
@@ -14,5 +16,6 @@ class RepoConfig():
             self.description = config.get("description")
             self.exclude_list = config.get("exclude")
 
+    # The __repr__ method returns a string representation of the object.
     def __repr__(self) -> str:
         return json.dumps(self.__dict__)

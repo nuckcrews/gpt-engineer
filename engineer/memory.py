@@ -10,6 +10,7 @@ __all__ = [
 
 session_memory_path = "./tmp/session.csv"
 
+# Class to handle work related operations
 class Work():
 
     def __init__(self, path: str, diff: str):
@@ -19,6 +20,7 @@ class Work():
     def concat(self):
         return f"Path: {self.path}\n Diff: {self.diff}"
 
+# Class to handle memory related operations
 class Memory():
 
     def __init__(self, extractor: Extractor):
