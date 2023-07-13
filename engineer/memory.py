@@ -28,7 +28,7 @@ class Memory():
 
     def embed(self):
         announce("Embedding files...")
-        
+
         embeddings = []
         def _embed(file):
             embeddings.append(self._embedding(file))
@@ -74,7 +74,7 @@ class Memory():
         }
 
     def _relevant_files(self, file: File):
-        embedding = self._embedding(file)
+        embedding = self._embedding(file)["embedding"]
         df = pd.read_csv(session_memory_path)
         df["embedding"] = df.embedding.apply(eval).apply(np.array)
         df["similarity"] = df.embedding.apply(lambda x: cosine_similarity(x, embedding))
@@ -86,6 +86,7 @@ class Memory():
             files.append(path)
 
         for path in paths:
-            Extractor(path).extract(_add_file)
+            if isinstance(path, str):
+                Extractor(path).extract(_add_file)
 
         return files
