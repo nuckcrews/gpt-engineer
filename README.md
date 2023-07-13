@@ -2,14 +2,14 @@
 
 **10x Engineer**
 
+#### NOTE: THIS IS NOT IN A PRODUCTION READY STATE
+
 ## Features
 
 * TBD
 
 ## Requirements
 
-* GPTOP installation
-* Pinecone Vector Database Index
 * OpenAI access to gpt-4
 
 ## Setup
