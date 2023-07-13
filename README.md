@@ -45,8 +45,6 @@ If you don’t have Python installed, [install it from here](https://www.python.
 
 6. Add your [OpenAI API key](https://beta.openai.com/account/api-keys) to the newly created `.env` file
 
-7. Add your [Pinecone API key and Region](https://docs.pinecone.io/docs/quickstart) to the newly created `.env` file
-
 ## CLI
 
 1. Run the application
