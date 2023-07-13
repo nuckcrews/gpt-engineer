@@ -1,0 +1,84 @@
+import pandas as pd
+import numpy as np
+from openai.embeddings_utils import get_embedding, cosine_similarity
+from .extract import Extractor, File
+
+__all__ = [
+    "Memory"
+]
+
+session_memory_path = ".memory/session.csv"
+
+class Work():
+
+    def __init__(self, path: str, diff: str):
+        self.path = path
+        self.diff = diff
+
+    def concat(self):
+        return f"Path: {self.path}\n Diff: {self.diff}"
+
+class Memory():
+
+    def __init__(self, extractor: Extractor):
+        self.extractor = extractor
+        self.completed_work = []
+
+    def embed(self):
+        embeddings = []
+        def _embed(file):
+            embeddings.append(self._embedding(file))
+
+        self.extractor.extract(_embed)
+
+        df = pd.DataFrame(embeddings, columns=["path", "name", "embedding"], index="path")
+        df.to_csv(session_memory_path)
+
+    def add_work(self, file: File):
+        work = Work(file.path, file.diff())
+        self.completed_work.append(work)
+
+        df = pd.read_csv(session_memory_path)
+        embedding = self._embedding(file)
+        df.at[file.path, "embedding"] = embedding["embedding"]
+        df.to_csv(session_memory_path)
+
+    def context(self, file: File):
+        relevant_files = self.relevant_files(file)
+        relevant_files_concat = "\n".join([file.concat() for file in relevant_files])
+        relevant_files_message = {"role": "system", "content": f"Relevant files:\n{relevant_files_concat}"}
+
+        completed_work_concat = "\n".join([work.concat() for work in self.completed_work])
+        completed_work_message = {"role": "system", "content": f"Completed work:\n{completed_work_concat}"}
+
+        return [relevant_files_message, completed_work_message]
+
+    def _embedding(self, file: File):
+        embedding = get_embedding(
+            file.content,
+            engine="text-embedding-ada-002",
+            max_tokens=8000
+        )
+
+        return {
+            "path": file.path,
+            "name": file.name,
+            "embedding": embedding
+        }
+
+    def _relevant_files(self, file: File):
+        embedding = self._embedding(file)
+        df = pd.read_csv(session_memory_path)
+        df["embedding"] = df.embedding.apply(eval).apply(np.array)
+        df["similarity"] = df.embedding.apply(lambda x: cosine_similarity(x, embedding))
+
+        paths = df.sort_values(by="similarity", ascending=False).head(3).path.tolist()
+
+        files = []
+        def _add_file(path):
+            files.append(path)
+
+        for path in paths:
+            Extractor(path).extract(_add_file)
+
+        return files

@@ -1,5 +1,5 @@
 from gptop.operator import Operator
-from .utils import announce
+from ..engineer.utils import announce
 
 
 def main():

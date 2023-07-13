@@ -1,9 +1,13 @@
 import yaml
 import json
 
-class RepoConfig:
+__all__ = [
+    "RepoConfig"
+]
 
-    def __init__(self, path):
+class RepoConfig():
+
+    def __init__(self, path: str):
         with open(path + "/ai.yaml", 'r') as file:
             config = yaml.safe_load(file)
             self.name = config.get("name")

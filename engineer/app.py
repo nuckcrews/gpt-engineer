@@ -1,8 +1,7 @@
 import subprocess
-from .operations.scan_edit import scan_edit
 from .utils import prompt_string, prompt_confirm
-from .config import RepoConfig
-from .memory import Memory
+from .repo import RepoConfig
+from .engineer import Engineer, Workspace
 
 temp_path = "./tmp/repo"
 
@@ -35,23 +34,20 @@ def main():
         stdout=subprocess.PIPE
     )
 
-    print("STARTING SCAN")
+    print("GETTING TO WORK")
 
-    config = RepoConfig(temp_path)
-
-    memory = Memory("engineer", exclude=config.exclude)
-    memory.upload(temp_path + path)
-
-    scan_edit(
-        goal=goal,
+    repo = RepoConfig(temp_path)
+    workspace = Workspace(
         path=temp_path + path,
-        full_scan=full_scan,
-        repo_name=config.name,
-        repo_description=config.description,
-        exclude=config.exclude
+        goal=goal,
+        repo_name=repo.name,
+        repo_description=repo.description,
+        exclude_list=repo.exclude_list
     )
+    engineer = Engineer(workspace)
+    engineer.execute()
 
-    print("FINISHED SCAN")
+    print("FINISHED WORK")
 
     subprocess.run(
         script([

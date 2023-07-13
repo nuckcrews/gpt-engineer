@@ -1,0 +1,1 @@
+Storage directory for file memory
