@@ -2,12 +2,13 @@ import pandas as pd
 import numpy as np
 from openai.embeddings_utils import get_embedding, cosine_similarity
 from .extract import Extractor, File
+from .utils import announce
 
 __all__ = [
     "Memory"
 ]
 
-session_memory_path = ".memory/session.csv"
+session_memory_path = "./tmp/session.csv"
 
 class Work():
 
@@ -23,16 +24,22 @@ class Memory():
     def __init__(self, extractor: Extractor):
         self.extractor = extractor
         self.completed_work = []
+        self.embed()
 
     def embed(self):
+        announce("Embedding files...")
+        
         embeddings = []
         def _embed(file):
             embeddings.append(self._embedding(file))
 
         self.extractor.extract(_embed)
 
-        df = pd.DataFrame(embeddings, columns=["path", "name", "embedding"], index="path")
+        df = pd.DataFrame(embeddings, columns=["path", "name", "embedding"])
+        df.set_index("path", inplace=True)
         df.to_csv(session_memory_path)
+
+        announce("Done embedding files.")
 
     def add_work(self, file: File):
         work = Work(file.path, file.diff())
@@ -44,7 +51,7 @@ class Memory():
         df.to_csv(session_memory_path)
 
     def context(self, file: File):
-        relevant_files = self.relevant_files(file)
+        relevant_files = self._relevant_files(file)
         relevant_files_concat = "\n".join([file.concat() for file in relevant_files])
         relevant_files_message = {"role": "system", "content": f"Relevant files:\n{relevant_files_concat}"}
 

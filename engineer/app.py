@@ -11,7 +11,6 @@ def main():
     base_branch = prompt_string("Base Branch:", default="mainline")
     dev_branch = prompt_string("Development Branch:", default="gpt-eng")
     path = prompt_string("Path to directory/file:", default="/")
-    full_scan = prompt_confirm("Should I do a full scan?")
     goal = prompt_string("Goal:")
 
     print("GETTING READY")
@@ -28,7 +27,8 @@ def main():
             f"git fetch",
             f"git checkout {base_branch}",
             f"git pull origin {base_branch}",
-            f"git checkout -b {dev_branch}"
+            f"git checkout -b {dev_branch}",
+            f"touch ./tmp/session.csv"
         ]),
         shell=True,
         stdout=subprocess.PIPE

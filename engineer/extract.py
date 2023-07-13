@@ -29,12 +29,12 @@ class File():
 
 
 class Extractor():
-    
+
     def __init__(self, path: str, exclude_list: list = []):
         self.base_path = path
         self.exclude_list = exclude_list
 
-    def extract(self, operation: function):
+    def extract(self, operation):
         if self.is_directory():
             return self.get_directory_content(path=self.base_path, operation=operation)
         else:
@@ -46,13 +46,13 @@ class Extractor():
     def is_directory(self) -> bool:
         return os.path.isdir(self.base_path)
 
-    def get_directory_content(self, path: str, operation: function):
+    def get_directory_content(self, path: str, operation):
         for filename in os.listdir(path):
             file_path = os.path.join(path, filename)
             if os.path.isfile(file_path):
                 self.extract_from_file(file_path, operation=operation)
 
-    def extract_from_file(self, path: str, operation: function):
+    def extract_from_file(self, path: str, operation):
         if any([path.startswith(exclude_item) for exclude_item in self.exclude_list]):
             return
 

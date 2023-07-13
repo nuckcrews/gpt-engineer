@@ -3,7 +3,7 @@ import os
 import os.path
 from openai import ChatCompletion
 from .extract import Extractor, File
-from .memory import Memory, Work
+from .memory import Memory
 from .utils import announce
 
 __all__ = [
@@ -13,7 +13,7 @@ __all__ = [
 
 class Workspace():
 
-    def _init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list: list[str]=[]):
+    def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list: list[str]=[]):
         self.path = path
         self.goal = goal
         self.repo_name = repo_name
@@ -52,7 +52,7 @@ class Engineer():
         ]
 
     def _refactor(self, file: File):
-        announce(self.workspace.path, prefix="Working on: ")
+        announce(file.path, prefix="Working on: ")
 
         response = ChatCompletion.create(
             model="gpt-4",
@@ -65,5 +65,5 @@ class Engineer():
         file.write(content)
         self.memory.add_work(file)
 
-        announce(self.workspace.path, prefix="Refactored: ")
+        announce(file.path, prefix="Refactored: ")
 
