@@ -5,21 +5,12 @@ from .engineer import Engineer, Workspace
 
 temp_path = "./tmp/repo"
 
-
-default_repo = "git@github.com:ncrews35/gpt-engineer.git"
-default_path = "/engineer"
-default_goal = "Add proper error handling to the project."
-
 def main():
-    # repo = prompt_string("Repository URL:")
+    repo = prompt_string("Repository URL:")
     base_branch = prompt_string("Base Branch:", default="mainline")
     dev_branch = prompt_string("Development Branch:", default="gpt-eng")
-    # path = prompt_string("Path to directory/file:", default="/")
-    # goal = prompt_string("Goal:")
-
-    repo = default_repo
-    path = default_path
-    goal = default_goal
+    path = prompt_string("Path to directory/file:", default="/")
+    goal = prompt_string("Goal:")
 
     print("GETTING READY")
 

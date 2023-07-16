@@ -94,7 +94,7 @@ class Engineer:
             },
             {
                 "role": "system",
-                "content": "Be sure to maintain correct indentation and style.",
+                "content": "Be sure to maintain correct indentation and style. Ensure the code is syntactically correct and valid.",
             },
             {
                 "role": "system",
