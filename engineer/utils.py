@@ -5,6 +5,7 @@ from PyInquirer import prompt
 
 __all__ = [
     "announce",
+    "error",
     "stream",
     "prompt_confirm",
     "prompt_string",
@@ -21,6 +22,12 @@ def announce(message, prefix: str = ""):
     cyan = '\033[96m'
     default = '\033[0m'
     print("{0}{1}{2}{3}".format(prefix, cyan, message, default))
+
+def error(message, prefix: str = ""):
+    # Function to print a colored message
+    red = '\033[91m'
+    default = '\033[0m'
+    print("{0}{1}{2}{3}".format(prefix, red, message, default))
 
 
 def stream(message, prefix: str = ""):
