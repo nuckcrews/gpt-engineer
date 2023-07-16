@@ -37,6 +37,8 @@ class Extractor:
             file_path = os.path.join(path, filename)
             if os.path.isfile(file_path):
                 self._extract_from_file(file_path, operation=operation)
+            elif os.path.isdir(file_path):
+                self._extract_from_directory(file_path, operation=operation)
 
     def _extract_from_file(self, path: str, operation):
         if any([path.startswith(exclude_item) for exclude_item in self.exclude_list]):
