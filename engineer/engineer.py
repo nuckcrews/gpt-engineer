@@ -3,7 +3,6 @@ import json
 import os.path
 from openai import ChatCompletion
 from .extract import Extractor, File
-from .memory import Memory
 from .utils import announce, error
 
 __all__ = ["Workspace", "Engineer"]
@@ -31,7 +30,6 @@ class Engineer:
         self.extractor = Extractor(
             path=workspace.path, exclude_list=workspace.exclude_list
         )
-        self.memory = Memory(self.extractor)
 
     def execute(self):
         self.extractor.extract(self._refactor)
@@ -54,7 +52,6 @@ class Engineer:
         ):
             function_args = json.loads(response_message["function_call"]["arguments"])
             self._edit_repo_file(file, function_args["changes"])
-            self.memory.add_work(file)
             announce(file.path, prefix="Refactored: ")
         else:
             error("No function call found in response message.")
