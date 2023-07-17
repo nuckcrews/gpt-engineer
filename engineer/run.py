@@ -1,5 +1,4 @@
 import subprocess
-from .utils import prompt_string
 from .repo import RepoConfig
 from .engineer import Engineer, Workspace
 
@@ -7,8 +6,8 @@ __all__ = ["Configuration", "run"]
 
 
 class Configuration:
-    def __init__(self, repo, base_branch, dev_branch, path, goal):
-        self.repo = repo
+    def __init__(self, repository_url, base_branch, dev_branch, path, goal):
+        self.repository_url = repository_url
         self.base_branch = base_branch
         self.dev_branch = dev_branch
         self.path = path
@@ -16,7 +15,7 @@ class Configuration:
 
 
 def run(configuration: Configuration):
-    temp_path = "./tmp/repo"
+    temp_path = "/tmp/repo"
 
     print("GETTING READY")
 
@@ -24,7 +23,7 @@ def run(configuration: Configuration):
     subprocess.run(
         script(
             [
-                f"git clone {configuration.repo} " + temp_path,
+                f"git clone {configuration.repository_url} " + temp_path,
                 f"cd {temp_path}",
                 f"git fetch",
                 f"git checkout {configuration.base_branch}",
