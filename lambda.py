@@ -1,13 +1,13 @@
 import os
 from engineer import run, Configuration
-from aws.db import DBTable
+from aws import DBTable
 
 TASKS_TABLE = os.getenv("TASKS_TABLE")
 
 
 def execute(event, context):
     table = DBTable(TASKS_TABLE, key="user_id", sort_key="user")
-
+    
     for record in event["Records"]:
         if record["eventName"] != "INSERT":
             continue
@@ -20,7 +20,7 @@ def execute(event, context):
 
         user_id = new_image["user_id"]["S"]
         task_id = new_image["task_id"]["S"]
-        repo = new_image["repo"]["S"]
+        repo = new_image["repository_url"]["S"]
         base_branch = new_image["base_branch"]["S"]
         dev_branch = new_image["dev_branch"]["S"]
         path = new_image["path"]["S"]

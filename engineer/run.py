@@ -70,5 +70,5 @@ def run(configuration: Configuration):
     print("SUCCESS! Generation complete.")
 
 
-def script(cmds: list[str]):
+def script(cmds):
     return " && ".join(cmds)

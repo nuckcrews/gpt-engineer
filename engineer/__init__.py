@@ -7,6 +7,6 @@ import openai
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-from engineer import *
+from .run import *
 
 __all__ = ["run", "Configuration"]

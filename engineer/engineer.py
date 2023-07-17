@@ -15,7 +15,7 @@ class Workspace:
         goal: str,
         repo_name: str,
         repo_description: str,
-        exclude_list: list[str] = [],
+        exclude_list = [],
     ):
         self.path = path
         self.goal = goal
