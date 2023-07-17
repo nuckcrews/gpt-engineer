@@ -23,3 +23,5 @@ data/
 *.keys.*
 
 tmp/
+
+.idea
