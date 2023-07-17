@@ -32,7 +32,10 @@ class Engineer:
         )
 
     def execute(self):
+try:
         self.extractor.extract(self._refactor)
+    except Exception as e:
+        error(f"Error while extracting: {str(e)}")
 
     def _refactor(self, file: File):
         announce(file.path, prefix="Working on: ")
@@ -51,7 +54,10 @@ class Engineer:
             and response_message["function_call"]["name"] == "edit_repo_file"
         ):
             function_args = json.loads(response_message["function_call"]["arguments"])
+try:
             self._edit_repo_file(file, function_args["changes"])
+        except Exception as e:
+            error(f"Error while editing file: {str(e)}")
             announce(file.path, prefix="Refactored: ")
         else:
             error("No function call found in response message.")
@@ -81,7 +87,10 @@ class Engineer:
                 lines.insert(line_number, content + "\n")
 
         with open(file.path, "w") as editable_file:
+try:
             editable_file.writelines(lines)
+        except Exception as e:
+            error(f"Error while writing to file: {str(e)}")
 
     def _messages(self, file: File):
         system_messages = [

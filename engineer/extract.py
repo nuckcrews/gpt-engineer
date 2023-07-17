@@ -16,7 +16,10 @@ class File:
         return f"Path: {self.path}\n Name: {self.name}\n Content: {self.content}"
 
     def diff(self):
-        return subprocess.check_output(["git", "diff", self.path]).decode("utf-8")
+try:
+    return subprocess.check_output(["git", "diff", self.path]).decode("utf-8")
+except Exception as e:
+    print(f"Error occurred while getting diff: {e}")
 
 
 class Extractor:
@@ -30,15 +33,24 @@ class Extractor:
                 path=self.base_path, operation=operation
             )
         else:
-            return self._extract_from_file(path=self.base_path, operation=operation)
+try:
+    return self._extract_from_file(path=self.base_path, operation=operation)
+except Exception as e:
+    print(f"Error occurred while extracting from file: {e}")
 
     def _extract_from_directory(self, path: str, operation):
         for filename in os.listdir(path):
             file_path = os.path.join(path, filename)
             if os.path.isfile(file_path):
-                self._extract_from_file(file_path, operation=operation)
+try:
+    self._extract_from_file(file_path, operation=operation)
+except Exception as e:
+    print(f"Error occurred while extracting from file: {e}")
             elif os.path.isdir(file_path):
-                self._extract_from_directory(file_path, operation=operation)
+try:
+    self._extract_from_directory(file_path, operation=operation)
+except Exception as e:
+    print(f"Error occurred while extracting from directory: {e}")
 
     def _extract_from_file(self, path: str, operation):
         if any([path.startswith(exclude_item) for exclude_item in self.exclude_list]):
@@ -49,7 +61,12 @@ class Extractor:
 
     def _read_file(self, path: str) -> str:
         lines_with_numbers = []
-        with open(path, "r") as file:
+try:
+    with open(path, "r") as file:
+        for line_number, line_content in enumerate(file, 1):
+            lines_with_numbers.append((line_number, line_content.strip()))
+except Exception as e:
+    print(f"Error occurred while reading file: {e}")
             for line_number, line_content in enumerate(file, 1):
                 lines_with_numbers.append((line_number, line_content.strip()))
 

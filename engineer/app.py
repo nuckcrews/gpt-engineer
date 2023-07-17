@@ -20,7 +20,25 @@ def run(configuration: Configuration):
 
     print("GETTING READY")
 
+try:
     subprocess.run(f"rm -r -f {temp_path}", shell=True, stdout=subprocess.PIPE)
+except Exception as e:
+    print(f'Error: {e}')
+    subprocess.run(
+        script(
+            [
+                f"git clone {configuration.repo} " + temp_path,
+                f"cd {temp_path}",
+                f"git fetch",
+                f"git checkout {configuration.base_branch}",
+                f"git pull origin {configuration.base_branch}",
+                f"git checkout -b {configuration.dev_branch}",
+                f"touch ./tmp/session.csv",
+            ]
+        ),
+        shell=True,
+        stdout=subprocess.PIPE,
+try:
     subprocess.run(
         script(
             [
@@ -36,6 +54,8 @@ def run(configuration: Configuration):
         shell=True,
         stdout=subprocess.PIPE,
     )
+except Exception as e:
+    print(f'Error: {e}')
 
     print("GETTING TO WORK")
 
@@ -48,7 +68,10 @@ def run(configuration: Configuration):
         exclude_list=repo.exclude_list,
     )
     engineer = Engineer(workspace)
+try:
     engineer.execute()
+except Exception as e:
+    print(f'Error: {e}')
 
     print("FINISHED WORK")
 
@@ -65,7 +88,23 @@ def run(configuration: Configuration):
         ),
         shell=True,
         stdout=subprocess.PIPE,
+try:
+    subprocess.run(
+        script(
+            [
+                f"cd {temp_path}",
+                f"git add .",
+                "git commit -m '[GPT] Generated Suggestions\n## Goal\n{0}\n\n#### Path: {1}'".format(
+                    configuration.goal, configuration.path
+                ),
+                f"git push origin {configuration.dev_branch} -f",
+            ]
+        ),
+        shell=True,
+        stdout=subprocess.PIPE,
     )
+except Exception as e:
+    print(f'Error: {e}')
 
     print("SUCCESS! Generation complete.")
 

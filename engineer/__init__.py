@@ -1,9 +1,15 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    load_dotenv()
+except Exception as e:
+    print(f'Error loading environment variables: {e}')
 
 import openai
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+try:
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+except Exception as e:
+    print(f'Error setting OpenAI API key: {e}')
 

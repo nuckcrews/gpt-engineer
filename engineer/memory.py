@@ -12,21 +12,28 @@ session_memory_path = "./tmp/session.csv"
 
 class Work():
 
-    def __init__(self, path: str, diff: str):
+def __init__(self, path: str, diff: str):
+    try:
         self.path = path
-        self.diff = diff
+self.diff = diff
+    except Exception as e:
+        print(f'Error initializing Work: {e}')
 
     def concat(self):
         return f"Path: {self.path}\n Diff: {self.diff}"
 
 class Memory():
 
-    def __init__(self, extractor: Extractor):
+def __init__(self, extractor: Extractor):
+    try:
         self.extractor = extractor
         self.completed_work = []
-        self.embed()
+self.embed()
+    except Exception as e:
+        print(f'Error initializing Memory: {e}')
 
-    def embed(self):
+def embed(self):
+    try:
         announce("Embedding files...")
 
         embeddings = []
@@ -39,18 +46,24 @@ class Memory():
         df.set_index("path", inplace=True)
         df.to_csv(session_memory_path)
 
-        announce("Done embedding files.")
+announce("Done embedding files.")
+    except Exception as e:
+        print(f'Error embedding files: {e}')
 
-    def add_work(self, file: File):
+def add_work(self, file: File):
+    try:
         work = Work(file.path, file.diff())
         self.completed_work.append(work)
 
         df = pd.read_csv(session_memory_path)
         embedding = self._embedding(file)
         df.at[file.path, "embedding"] = embedding["embedding"]
-        df.to_csv(session_memory_path)
+df.to_csv(session_memory_path)
+    except Exception as e:
+        print(f'Error adding work: {e}')
 
-    def context(self, file: File):
+def context(self, file: File):
+    try:
         relevant_files = self._relevant_files(file)
         relevant_files_concat = "\n".join([file.concat() for file in relevant_files])
         relevant_files_message = {"role": "system", "content": f"Relevant files:\n{relevant_files_concat}"}
@@ -58,9 +71,12 @@ class Memory():
         completed_work_concat = "\n".join([work.concat() for work in self.completed_work])
         completed_work_message = {"role": "system", "content": f"Completed work:\n{completed_work_concat}"}
 
-        return [relevant_files_message, completed_work_message]
+return [relevant_files_message, completed_work_message]
+    except Exception as e:
+        print(f'Error getting context: {e}')
 
-    def _embedding(self, file: File):
+def _embedding(self, file: File):
+    try:
         embedding = get_embedding(
             file.content,
             engine="text-embedding-ada-002",
@@ -71,9 +87,12 @@ class Memory():
             "path": file.path,
             "name": file.name,
             "embedding": embedding
-        }
+}
+    except Exception as e:
+        print(f'Error getting embedding: {e}')
 
-    def _relevant_files(self, file: File):
+def _relevant_files(self, file: File):
+    try:
         embedding = self._embedding(file)["embedding"]
         df = pd.read_csv(session_memory_path)
         df["embedding"] = df.embedding.apply(eval).apply(np.array)
@@ -89,4 +108,6 @@ class Memory():
             if isinstance(path, str):
                 Extractor(path).extract(_add_file)
 
-        return files
+return files
+    except Exception as e:
+        print(f'Error getting relevant files: {e}')
