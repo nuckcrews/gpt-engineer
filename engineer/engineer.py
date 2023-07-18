@@ -71,8 +71,9 @@ class Engineer():
         with open(file.path, "r") as editable_file:
             lines = editable_file.readlines()
 
-        for change in changes:
-            line_number = change["line"] - 1
+line_adjustment = 0
+for change in sorted(changes, key=lambda x: x['line']):
+line_number = change["line"] - 1 + line_adjustment
             content = change["content"]
             change_type = change["type"]
 
@@ -81,10 +82,12 @@ class Engineer():
             elif change_type == "remove":
                 lines[line_number] = ""
             elif change_type == "add":
-                lines.insert(line_number, content + "\n")
-
-        with open(file.path, "w") as editable_file:
-            editable_file.writelines(lines)
+if change_type == "remove":
+lines.pop(line_number)
+line_adjustment -= 1
+elif change_type == "add":
+lines.insert(line_number, content + "\n")
+line_adjustment += 1
 
     def _messages(self, file: File):
         system_messages = [
