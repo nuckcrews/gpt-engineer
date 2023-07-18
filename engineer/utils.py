@@ -20,12 +20,12 @@ __all__ = [
 def announce(message, prefix: str = ""):
     """
     Function to print a colored message.
-    
+
     Parameters:
     message (str): The message to be printed.
     prefix (str): An optional prefix for the message. Default is an empty string.
     """
-    # Function to print a colored message
+
     cyan = '\033[96m'
     default = '\033[0m'
     print("{0}{1}{2}{3}".format(prefix, cyan, message, default))
@@ -33,12 +33,12 @@ def announce(message, prefix: str = ""):
 def error(message, prefix: str = ""):
     """
     Function to print a colored error message.
-    
+
     Parameters:
     message (str): The error message to be printed.
     prefix (str): An optional prefix for the message. Default is an empty string.
     """
-    # Function to print a colored message
+
     red = '\033[91m'
     default = '\033[0m'
     print("{0}{1}{2}{3}".format(prefix, red, message, default))
@@ -47,12 +47,12 @@ def error(message, prefix: str = ""):
 def stream(message, prefix: str = ""):
     """
     Function to print a colored message without a newline at the end.
-    
+
     Parameters:
     message (str): The message to be printed.
     prefix (str): An optional prefix for the message. Default is an empty string.
     """
-    # Function to print a colored message
+
     cyan = '\033[96m'
     default = '\033[0m'
     print("{0}{1}{2}{3}".format(prefix, cyan, message, default), end="")
@@ -62,12 +62,11 @@ def stream(message, prefix: str = ""):
 def prompt_confirm(question_message, default=True):
     """
     Function to prompt a confirmation question.
-    
+
     Parameters:
     question_message (str): The question to be asked.
     default (bool): The default answer if none is provided. Default is True.
     """
-    # Function to prompt a confirmation question
 
     return prompt(
         {
@@ -82,12 +81,11 @@ def prompt_confirm(question_message, default=True):
 def prompt_string(question_message, default=None):
     """
     Function to prompt a string input question.
-    
+
     Parameters:
     question_message (str): The question to be asked.
     default (str): The default answer if none is provided. Default is None.
     """
-    # Function to prompt a string input question
 
     return prompt(
         {
@@ -102,13 +100,13 @@ def prompt_string(question_message, default=None):
 def prompt_list(question_message, choices, default=None):
     """
     Function to prompt a list selection question.
-    
+
     Parameters:
     question_message (str): The question to be asked.
     choices (list): The list of choices.
     default (str): The default choice if none is selected. Default is None.
     """
-    # Function to prompt a list selection question
+
     return prompt(
         {
             'type': 'list',
@@ -123,15 +121,12 @@ def prompt_list(question_message, choices, default=None):
 def llm_response(obj: any) -> str:
     """
     Function to extract the top result from the LLM output.
-    
+
     Parameters:
     obj (any): The LLM output.
-    
+
     Returns:
     str: The top result from the LLM output.
-    """
-    """
-    Extracts the top result from the LLM output
     """
 
     try:
@@ -145,16 +140,12 @@ def llm_response(obj: any) -> str:
 def llm_json(obj: any):
     """
     Function to extract the top result from the LLM output and convert it to JSON.
-    
+
     Parameters:
     obj (any): The LLM output.
-    
+
     Returns:
     dict: The top result from the LLM output converted to JSON.
-    """
-    """
-    Extracts the top result from the LLM output
-    and converts it to JSON
     """
 
     try:
@@ -172,11 +163,11 @@ encoding_3_5 = tiktoken.encoding_for_model("gpt-3.5-turbo")
 def num_tokens(content: str, model="gpt-4"):
     """
     Function to calculate the number of tokens in the content for a specific model.
-    
+
     Parameters:
     content (str): The content to be tokenized.
     model (str): The model to be used for tokenization. Default is "gpt-4".
-    
+
     Returns:
     int: The number of tokens in the content.
     """
@@ -191,11 +182,11 @@ def num_tokens(content: str, model="gpt-4"):
 def is_token_overflow(content: str, model="gpt-4"):
     """
     Function to check if the number of tokens in the content exceeds the maximum limit for a specific model.
-    
+
     Parameters:
     content (str): The content to be checked.
     model (str): The model to be used for checking. Default is "gpt-4".
-    
+
     Returns:
     bool: True if the number of tokens exceeds the maximum limit, False otherwise.
     """
