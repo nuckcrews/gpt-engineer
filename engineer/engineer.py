@@ -9,7 +9,20 @@ __all__ = ["Workspace", "Engineer"]
 
 
 class Workspace:
-    def __init__(
+    """
+    This class represents the workspace for the Engineer tool.
+    It contains all the necessary information about the repository.
+    """
+def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list = []):
+        """
+        Initializes the Workspace object.
+
+        :param path: The path to the repository.
+        :param goal: The goal for the Engineer tool to achieve.
+        :param repo_name: The name of the repository.
+        :param repo_description: The description of the repository.
+        :param exclude_list: A list of files to exclude from the scan.
+        """
         self,
         path: str,
         goal: str,
@@ -25,16 +38,34 @@ class Workspace:
 
 
 class Engineer:
-    def __init__(self, workspace: Workspace):
+    """
+    This class represents the Engineer tool.
+    It contains the logic for scanning the codebase and making the necessary edits.
+    """
+def __init__(self, workspace: Workspace):
+        """
+        Initializes the Engineer object.
+
+        :param workspace: The Workspace object containing information about the repository.
+        """
         self.workspace = workspace
         self.extractor = Extractor(
             path=workspace.path, exclude_list=workspace.exclude_list
         )
 
-    def execute(self):
+def execute(self):
+        """
+        Executes the Engineer tool.
+        It extracts the necessary information from the codebase and makes the necessary edits.
+        """
         self.extractor.extract(self._refactor)
 
-    def _refactor(self, file: File):
+def _refactor(self, file: File):
+        """
+        Refactors a given file based on the goal provided.
+
+        :param file: The file to refactor.
+        """
         announce(file.path, prefix="Working on: ")
 
         response = ChatCompletion.create(

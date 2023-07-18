@@ -6,7 +6,20 @@ __all__ = ["Configuration", "run"]
 
 
 class Configuration:
-    def __init__(self, repository_url, base_branch, dev_branch, path, goal):
+    """
+    This class is responsible for setting up the configuration for the GPT Engineer.
+    """
+def __init__(self, repository_url, base_branch, dev_branch, path, goal):
+        """
+        Initializes the Configuration class.
+
+        Parameters:
+        repository_url (str): The URL of the repository.
+        base_branch (str): The base branch of the repository.
+        dev_branch (str): The development branch of the repository.
+        path (str): The path to the file in the repository.
+        goal (str): The goal for the GPT Engineer.
+        """
         self.repository_url = repository_url
         self.base_branch = base_branch
         self.dev_branch = dev_branch
@@ -15,6 +28,12 @@ class Configuration:
 
 
 def run(configuration: Configuration):
+    """
+    This function runs the GPT Engineer with the given configuration.
+
+    Parameters:
+    configuration (Configuration): The configuration for the GPT Engineer.
+    """
     temp_path = "/tmp/repo"
 
     print("GETTING READY")
@@ -70,4 +89,10 @@ def run(configuration: Configuration):
 
 
 def script(cmds):
+    """
+    This function joins the given commands with ' && '.
+
+    Parameters:
+    cmds (list): The list of commands to join.
+    """
     return " && ".join(cmds)

@@ -7,7 +7,18 @@ __all__ = ["File", "Extractor"]
 
 
 class File:
-    def __init__(self, path: str, name: str, content):
+    """
+    This class represents a file in the repository.
+    """
+def __init__(self, path: str, name: str, content):
+        """
+        Initializes the File object.
+
+        Parameters:
+        path (str): The path of the file.
+        name (str): The name of the file.
+        content: The content of the file.
+        """
         self.path = path
         self.name = name
         self.content = content
@@ -20,7 +31,17 @@ class File:
 
 
 class Extractor:
-    def __init__(self, path: str, exclude_list: list = []):
+    """
+    This class is responsible for extracting information from the repository.
+    """
+def __init__(self, path: str, exclude_list: list = []):
+        """
+        Initializes the Extractor object.
+
+        Parameters:
+        path (str): The base path for extraction.
+        exclude_list (list): The list of paths to exclude from extraction.
+        """
         self.base_path = path
         self.exclude_list = exclude_list
 
