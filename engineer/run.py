@@ -45,7 +45,7 @@ def run(configuration: Configuration):
     subprocess.run(
         script(
             [
-                f"" f"git clone {configuration.repository_url} " + temp_path,
+                f"git clone {configuration.repository_url} " + temp_path,
                 f"cd {temp_path}",
                 f"git fetch",
                 f"git checkout {configuration.base_branch}",
