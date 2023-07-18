@@ -1,5 +1,5 @@
 from engineer.run import Configuration, run
-from engineer.run import prompt_string
+from engineer.utils import prompt_string
 
 
 def main():
