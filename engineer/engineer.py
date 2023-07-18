@@ -9,6 +9,7 @@ __all__ = ["Workspace", "Engineer"]
 
 
 class Workspace:
+    """This class represents the workspace which includes the path, goal, repository name, repository description, and an exclude list."""
     def __init__(
         self,
         path: str,
@@ -25,6 +26,7 @@ class Workspace:
 
 
 class Engineer:
+    """This class represents the Engineer which includes the workspace and extractor."""
     def __init__(self, workspace: Workspace):
         self.workspace = workspace
         self.extractor = Extractor(

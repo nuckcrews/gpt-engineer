@@ -6,6 +6,7 @@ __all__ = ["Configuration", "run"]
 
 
 class Configuration:
+    # This class is used to configure the repository and the goal
     def __init__(self, repository_url, base_branch, dev_branch, path, goal):
         self.repository_url = repository_url
         self.base_branch = base_branch
@@ -15,6 +16,7 @@ class Configuration:
 
 
 def run(configuration: Configuration):
+    # This function is used to run the configuration
     temp_path = "/tmp/repo"
 
     print("GETTING READY")
@@ -38,7 +40,8 @@ def run(configuration: Configuration):
 
     print("GETTING TO WORK")
 
-    repo = RepoConfig(temp_path)
+repo = RepoConfig(temp_path)
+    # This line is used to configure the repository
     workspace = Workspace(
         path=temp_path + configuration.path,
         goal=configuration.goal,
@@ -46,7 +49,8 @@ def run(configuration: Configuration):
         repo_description=repo.description,
         exclude_list=repo.exclude_list,
     )
-    engineer = Engineer(workspace)
+engineer = Engineer(workspace)
+    # This line is used to initialize the engineer
     engineer.execute()
 
     print("FINISHED WORK")
@@ -70,4 +74,5 @@ def run(configuration: Configuration):
 
 
 def script(cmds):
+    # This function is used to run the commands
     return " && ".join(cmds)

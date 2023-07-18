@@ -17,20 +17,20 @@ __all__ = [
 ]
 
 
-def announce(message, prefix: str = ""):
+# Function to print a colored message in cyan
     # Function to print a colored message
     cyan = '\033[96m'
     default = '\033[0m'
     print("{0}{1}{2}{3}".format(prefix, cyan, message, default))
 
-def error(message, prefix: str = ""):
+# Function to print a colored message in red
     # Function to print a colored message
     red = '\033[91m'
     default = '\033[0m'
     print("{0}{1}{2}{3}".format(prefix, red, message, default))
 
 
-def stream(message, prefix: str = ""):
+# Function to print a colored message in cyan without a newline at the end
     # Function to print a colored message
     cyan = '\033[96m'
     default = '\033[0m'
@@ -77,7 +77,7 @@ def prompt_list(question_message, choices, default=None):
     ).get('name')
 
 
-def llm_response(obj: any) -> str:
+# Function to extract the top result from the LLM output
     """
     Extracts the top result from the LLM output
     """
@@ -90,7 +90,7 @@ def llm_response(obj: any) -> str:
         return None
 
 
-def llm_json(obj: any):
+# Function to extract the top result from the LLM output and convert it to JSON
     """
     Extracts the top result from the LLM output
     and converts it to JSON
@@ -108,7 +108,7 @@ def llm_json(obj: any):
 encoding_4 = tiktoken.encoding_for_model("gpt-4")
 encoding_3_5 = tiktoken.encoding_for_model("gpt-3.5-turbo")
 
-def num_tokens(content: str, model="gpt-4"):
+# Function to calculate the number of tokens in a string for a given model
     if model == "gpt-3.5-turbo":
         encoding = encoding_3_5
     else:
@@ -117,7 +117,7 @@ def num_tokens(content: str, model="gpt-4"):
     return len(encoding.encode(content))
 
 
-def is_token_overflow(content: str, model="gpt-4"):
+# Function to check if the number of tokens in a string exceeds the maximum for a given model
     if model == "gpt-3.5-turbo":
         max_tokens = 3900
     else:

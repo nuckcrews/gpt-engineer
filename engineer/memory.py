@@ -10,7 +10,7 @@ __all__ = [
 
 session_memory_path = "./tmp/session.csv"
 
-class Work():
+class Work():  # This class represents a unit of work done on a file
 
     def __init__(self, path: str, diff: str):
         self.path = path
@@ -19,7 +19,7 @@ class Work():
     def concat(self):
         return f"Path: {self.path}\n Diff: {self.diff}"
 
-class Memory():
+class Memory():  # This class represents the memory of the system, storing completed work and embeddings
 
     def __init__(self, extractor: Extractor):
         self.extractor = extractor
@@ -30,7 +30,7 @@ class Memory():
         announce("Embedding files...")
 
         embeddings = []
-        def _embed(file):
+def _embed(file):  # This function embeds a file and appends it to the embeddings list
             embeddings.append(self._embedding(file))
 
         self.extractor.extract(_embed)
@@ -41,7 +41,7 @@ class Memory():
 
         announce("Done embedding files.")
 
-    def add_work(self, file: File):
+def add_work(self, file: File):  # This function adds a completed work to the memory
         work = Work(file.path, file.diff())
         self.completed_work.append(work)
 
@@ -50,7 +50,7 @@ class Memory():
         df.at[file.path, "embedding"] = embedding["embedding"]
         df.to_csv(session_memory_path)
 
-    def context(self, file: File):
+def context(self, file: File):  # This function returns the context of a file, including relevant files and completed work
         relevant_files = self._relevant_files(file)
         relevant_files_concat = "\n".join([file.concat() for file in relevant_files])
         relevant_files_message = {"role": "system", "content": f"Relevant files:\n{relevant_files_concat}"}
@@ -60,7 +60,7 @@ class Memory():
 
         return [relevant_files_message, completed_work_message]
 
-    def _embedding(self, file: File):
+def _embedding(self, file: File):  # This function returns the embedding of a file
         embedding = get_embedding(
             file.content,
             engine="text-embedding-ada-002",
@@ -73,7 +73,7 @@ class Memory():
             "embedding": embedding
         }
 
-    def _relevant_files(self, file: File):
+def _relevant_files(self, file: File):  # This function returns the files that are most relevant to a given file
         embedding = self._embedding(file)["embedding"]
         df = pd.read_csv(session_memory_path)
         df["embedding"] = df.embedding.apply(eval).apply(np.array)
@@ -82,7 +82,7 @@ class Memory():
         paths = df.sort_values(by="similarity", ascending=False).head(3).path.tolist()
 
         files = []
-        def _add_file(path):
+def _add_file(path):  # This function adds a file to the files list
             files.append(path)
 
         for path in paths:

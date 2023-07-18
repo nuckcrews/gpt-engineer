@@ -6,6 +6,7 @@ from .utils import *
 __all__ = ["File", "Extractor"]
 
 
+# Class to represent a file
 class File:
     def __init__(self, path: str, name: str, content):
         self.path = path
@@ -18,6 +19,7 @@ class File:
     def diff(self):
         return subprocess.check_output(["git", "diff", self.path]).decode("utf-8")
 
+# Class to extract files from a directory or a single file
 
 class Extractor:
     def __init__(self, path: str, exclude_list: list = []):
