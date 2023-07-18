@@ -4,6 +4,9 @@ from engineer import run, Configuration
 from aws import DBTable
 
 TASKS_TABLE = os.getenv("TASKS_TABLE")
+ACCESS_TOKEN = os.getenv("PERSONAL_ACCESS_TOKEN")
+BOT_NAME = os.getenv("BOT_NAME")
+BOT_EMAIL = os.getenv("BOT_EMAIL")
 
 
 def execute(event, context):
@@ -41,6 +44,9 @@ def execute(event, context):
                     dev_branch=dev_branch,
                     path=path,
                     goal=goal,
+                    bot_name=BOT_NAME,
+                    bot_email=BOT_EMAIL,
+                    access_token=ACCESS_TOKEN
                 )
             )
             table.update(

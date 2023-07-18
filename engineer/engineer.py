@@ -9,14 +9,8 @@ __all__ = ["Workspace", "Engineer"]
 
 
 class Workspace:
-    def __init__(
-        self,
-        path: str,
-        goal: str,
-        repo_name: str,
-        repo_description: str,
-        exclude_list = [],
-    ):
+
+    def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list = []):
         self.path = path
         self.goal = goal
         self.repo_name = repo_name
@@ -25,6 +19,7 @@ class Workspace:
 
 
 class Engineer:
+    
     def __init__(self, workspace: Workspace):
         self.workspace = workspace
         self.extractor = Extractor(

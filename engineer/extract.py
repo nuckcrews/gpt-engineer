@@ -7,6 +7,7 @@ __all__ = ["File", "Extractor"]
 
 
 class File:
+    
     def __init__(self, path: str, name: str, content):
         self.path = path
         self.name = name
@@ -20,6 +21,7 @@ class File:
 
 
 class Extractor:
+
     def __init__(self, path: str, exclude_list: list = []):
         self.base_path = path
         self.exclude_list = exclude_list

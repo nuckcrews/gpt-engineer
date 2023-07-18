@@ -1,3 +1,4 @@
+import os
 import subprocess
 from .repo import RepoConfig
 from .engineer import Engineer, Workspace
@@ -6,12 +7,18 @@ __all__ = ["Configuration", "run"]
 
 
 class Configuration:
-    def __init__(self, repository_url, base_branch, dev_branch, path, goal):
-        self.repository_url = repository_url
+
+    def __init__(self, repository_url: str, base_branch: str, dev_branch: str, path: str, goal: str, bot_name: str, bot_email: str, access_token: str=None):
+        if access_token:
+            self.repository_url = repository_url.replace("https://", f"https://{access_token}@")
+        else:
+            self.repository_url = repository_url
         self.base_branch = base_branch
         self.dev_branch = dev_branch
         self.path = path
         self.goal = goal
+        self.bot_name = bot_name
+        self.bot_email = bot_email
 
 
 def run(configuration: Configuration):
@@ -20,10 +27,11 @@ def run(configuration: Configuration):
     print("GETTING READY")
 
     subprocess.run(f"rm -r -f {temp_path}", shell=True, stdout=subprocess.PIPE)
+
     subprocess.run(
         script(
             [
-                f"git clone {configuration.repository_url} " + temp_path,
+                f"" f"git clone {configuration.repository_url} " + temp_path,
                 f"cd {temp_path}",
                 f"git fetch",
                 f"git checkout {configuration.base_branch}",
@@ -39,14 +47,14 @@ def run(configuration: Configuration):
     print("GETTING TO WORK")
 
     repo = RepoConfig(temp_path)
-    workspace = Workspace(
+    engineer = Engineer(Workspace(
         path=temp_path + configuration.path,
         goal=configuration.goal,
         repo_name=repo.name,
         repo_description=repo.description,
         exclude_list=repo.exclude_list,
-    )
-    engineer = Engineer(workspace)
+    ))
+
     engineer.execute()
 
     print("FINISHED WORK")
@@ -55,11 +63,15 @@ def run(configuration: Configuration):
         script(
             [
                 f"cd {temp_path}",
+                f'git config user.name "{configuration.bot_name}"',
+                f'git config user.email "{configuration.bot_email}"',
                 f"git add .",
                 "git commit -m '[GPT] Generated Suggestions\n## Goal\n{0}\n\n#### Path: {1}'".format(
                     configuration.goal, configuration.path
                 ),
-                f"git push origin {configuration.dev_branch} -f",
+                "git push {0} {1} -f".format(
+                    configuration.repository_url, configuration.dev_branch
+                ),
             ]
         ),
         shell=True,
