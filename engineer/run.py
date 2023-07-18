@@ -51,7 +51,7 @@ def run(configuration: Configuration):
                 f"git checkout {configuration.base_branch}",
                 f"git pull origin {configuration.base_branch}",
                 f"git checkout -b {configuration.dev_branch}",
-                f"touch ./tmp/session.csv",
+                f"touch /tmp/session.csv",
             ]
         ),
         shell=True,
@@ -80,9 +80,7 @@ def run(configuration: Configuration):
                 f'git config user.name "{configuration.bot_name}"',
                 f'git config user.email "{configuration.bot_email}"',
                 f"git add .",
-                "git commit -m '[GPT] Generated Suggestions\n## Goal\n{0}\n\n#### Path: {1}'".format(
-                    json.dumps(configuration.goal), configuration.path
-                ),
+                "git commit -m '[GPT] Generated Suggestions'",
                 "git push {0} {1} -f".format(
                     configuration.repository_url, configuration.dev_branch
                 ),
