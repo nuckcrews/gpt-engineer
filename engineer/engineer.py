@@ -148,3 +148,13 @@ class Engineer():
                 },
             }
         ]
+def test_edit_repo_file(self):
+    changes = [{'line': 13, 'content': 'class Work():  # This class represents a unit of work done on a file.', 'type': 'remove'}, {'line': 13, 'content': 'class Work():  \n    """This class represents a unit of work done on a file."""', 'type': 'add'}, {'line': 15, 'content': 'def __init__(self, path: str, diff: str):  # Initializer requires a file path and a diff string.', 'type': 'remove'}, {'line': 15, 'content': 'def __init__(self, path: str, diff: str):  \n    """Initializer requires a file path and a diff string."""', 'type': 'add'}, {'line': 22, 'content': 'class Memory():  # This class represents the memory of the system, storing completed work and embeddings.', 'type': 'remove'}, {'line': 22, 'content': 'class Memory():  \n    """This class represents the memory of the system, storing completed work and embeddings."""', 'type': 'add'}, {'line': 24, 'content': 'def __init__(self, extractor: Extractor):  # Initializer requires an Extractor object.', 'type': 'remove'}, {'line': 24, 'content': 'def __init__(self, extractor: Extractor):  \n    """Initializer requires an Extractor object."""', 'type': 'add'}]
+    file = File('test_file.py', 'test content')
+    self._edit_repo_file(file, changes)
+    with open(file.path, 'r') as f:
+        content = f.read()
+    self.assertIn('class Work():  \n    """This class represents a unit of work done on a file."""', content)
+    self.assertIn('def __init__(self, path: str, diff: str):  \n    """Initializer requires a file path and a diff string."""', content)
+    self.assertIn('class Memory():  \n    """This class represents the memory of the system, storing completed work and embeddings."""', content)
+    self.assertIn('def __init__(self, extractor: Extractor):  \n    """Initializer requires an Extractor object."""', content)
