@@ -78,13 +78,21 @@ class Engineer():
             change_type = change["type"]
 
             if change_type == "remove":
+                if len(lines) <= line_number:
+                    continue
                 lines.pop(line_number)
                 line_adjustment -= 1
             elif change_type == "add":
-                lines.insert(line_number, content + "\n")
-                line_adjustment += 1
+                if len(lines) <= line_number:
+                    lines.append(content + "\n")
+                else:
+                    lines.insert(line_number, content + "\n")
+                    line_adjustment += 1
             elif change_type == "edit":
-                lines[line_number] = content + "\n"
+                if len(lines) <= line_number:
+                    lines.append(content + "\n")
+                else:
+                    lines[line_number] = content + "\n"
 
         with open(file.path, "w") as editable_file:
             editable_file.writelines(lines)
