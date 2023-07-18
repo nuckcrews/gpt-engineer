@@ -1,4 +1,4 @@
-import os
+import json
 import subprocess
 from .repo import RepoConfig
 from .engineer import Engineer, Workspace
@@ -81,7 +81,7 @@ def run(configuration: Configuration):
                 f'git config user.email "{configuration.bot_email}"',
                 f"git add .",
                 "git commit -m '[GPT] Generated Suggestions\n## Goal\n{0}\n\n#### Path: {1}'".format(
-                    configuration.goal, configuration.path
+                    json.dumps(configuration.goal), configuration.path
                 ),
                 "git push {0} {1} -f".format(
                     configuration.repository_url, configuration.dev_branch

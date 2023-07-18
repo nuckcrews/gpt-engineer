@@ -8,7 +8,7 @@ __all__ = [
     "Memory"
 ]
 
-session_memory_path = "./tmp/session.csv"
+session_memory_path = "/tmp/session.csv"
 
 class Work():
 
