@@ -10,15 +10,19 @@ __all__ = [
 
 session_memory_path = "./tmp/session.csv"
 
-class Work():  # This class represents a unit of work done on a file.
-
+class Work():  
+    """This class represents a unit of work done on a file."""
+def __init__(self, path: str, diff: str):  
+    """Initializer requires a file path and a diff string."""
     def __init__(self, path: str, diff: str):  # Initializer requires a file path and a diff string.
         self.path = path
         self.diff = diff
 
     def concat(self):
-        return f"Path: {self.path}\n Diff: {self.diff}"
-
+class Memory():  
+    """This class represents the memory of the system, storing completed work and embeddings."""
+def __init__(self, extractor: Extractor):  
+    """Initializer requires an Extractor object."""
 class Memory():  # This class represents the memory of the system, storing completed work and embeddings.
 
     def __init__(self, extractor: Extractor):  # Initializer requires an Extractor object.
