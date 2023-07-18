@@ -13,7 +13,8 @@ class Workspace:
     This class represents the workspace for the Engineer tool.
     It contains all the necessary information about the repository.
     """
-def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list = []):
+
+    def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list = []):
         """
         Initializes the Workspace object.
 
@@ -23,13 +24,6 @@ def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, 
         :param repo_description: The description of the repository.
         :param exclude_list: A list of files to exclude from the scan.
         """
-        self,
-        path: str,
-        goal: str,
-        repo_name: str,
-        repo_description: str,
-        exclude_list = [],
-    ):
         self.path = path
         self.goal = goal
         self.repo_name = repo_name
@@ -42,7 +36,8 @@ class Engineer:
     This class represents the Engineer tool.
     It contains the logic for scanning the codebase and making the necessary edits.
     """
-def __init__(self, workspace: Workspace):
+
+    def __init__(self, workspace: Workspace):
         """
         Initializes the Engineer object.
 
@@ -53,14 +48,14 @@ def __init__(self, workspace: Workspace):
             path=workspace.path, exclude_list=workspace.exclude_list
         )
 
-def execute(self):
+    def execute(self):
         """
         Executes the Engineer tool.
         It extracts the necessary information from the codebase and makes the necessary edits.
         """
         self.extractor.extract(self._refactor)
 
-def _refactor(self, file: File):
+    def _refactor(self, file: File):
         """
         Refactors a given file based on the goal provided.
 

@@ -11,10 +11,10 @@ class RepoConfig():
     It is initialized with a path to the configuration file.
     """
 
-def __init__(self, path: str):
+    def __init__(self, path: str):
         """
         Initializes the RepoConfig object.
-        
+
         Parameters:
         path (str): The path to the configuration file.
         """

@@ -10,7 +10,8 @@ class File:
     """
     This class represents a file in the repository.
     """
-def __init__(self, path: str, name: str, content):
+
+    def __init__(self, path: str, name: str, content):
         """
         Initializes the File object.
 
@@ -34,7 +35,8 @@ class Extractor:
     """
     This class is responsible for extracting information from the repository.
     """
-def __init__(self, path: str, exclude_list: list = []):
+
+    def __init__(self, path: str, exclude_list: list = []):
         """
         Initializes the Extractor object.
 

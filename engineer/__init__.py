@@ -1,12 +1,12 @@
-import os  # Importing os module to interact with the OS
-from dotenv import load_dotenv  # Importing load_dotenv from dotenv to load environment variables
+import os
+from dotenv import load_dotenv
 
-load_dotenv()  # Loading environment variables
+load_dotenv()
 
-import openai  # Importing openai to interact with OpenAI's API
+import openai
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Setting OpenAI's API key from environment variable
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-from .run import *  # Importing all from run module
+from .run import *
 
-__all__ = ["run", "Configuration"]  # Defining all the modules to be imported when * is used
+__all__ = ["run", "Configuration"]
