@@ -8,7 +8,11 @@ from .utils import announce, error
 __all__ = ["Workspace", "Engineer"]
 
 
-class Workspace:
+class Workspace():
+    """
+    This class represents the workspace for the Engineer tool.
+    It contains all the necessary information about the repository.
+    """
 
     def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list = []):
         self.path = path
@@ -18,8 +22,12 @@ class Workspace:
         self.exclude_list = exclude_list
 
 
-class Engineer:
-    
+class Engineer():
+    """
+    This class represents the Engineer tool.
+    It contains the logic for scanning the codebase and making the necessary edits.
+    """
+
     def __init__(self, workspace: Workspace):
         self.workspace = workspace
         self.extractor = Extractor(

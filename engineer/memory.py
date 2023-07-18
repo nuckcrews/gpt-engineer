@@ -13,6 +13,7 @@ session_memory_path = "./tmp/session.csv"
 class Work():
 
     def __init__(self, path: str, diff: str):
+        """Initializer requires a file path and a diff string."""
         self.path = path
         self.diff = diff
 
@@ -22,6 +23,7 @@ class Work():
 class Memory():
 
     def __init__(self, extractor: Extractor):
+        """This class represents the memory of the system, storing completed work and embeddings."""
         self.extractor = extractor
         self.completed_work = []
         self.embed()

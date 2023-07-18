@@ -9,6 +9,20 @@ __all__ = ["Configuration", "run"]
 class Configuration:
 
     def __init__(self, repository_url: str, base_branch: str, dev_branch: str, path: str, goal: str, bot_name: str, bot_email: str, access_token: str=None):
+        """
+        Initializes the Configuration class.
+
+        Parameters:
+        repository_url (str): The URL of the repository.
+        base_branch (str): The base branch of the repository.
+        dev_branch (str): The development branch of the repository.
+        path (str): The path to the file in the repository.
+        goal (str): The goal for the GPT Engineer.
+        bot_name (str): The name of the bot.
+        bot_email (str): The email of the bot.
+        access_token (str): The access token for the repository.
+        """
+
         if access_token:
             self.repository_url = repository_url.replace("https://", f"https://{access_token}@")
         else:

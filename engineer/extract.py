@@ -7,7 +7,10 @@ __all__ = ["File", "Extractor"]
 
 
 class File:
-    
+    """
+    This class represents a file in the repository.
+    """
+
     def __init__(self, path: str, name: str, content):
         self.path = path
         self.name = name
@@ -20,7 +23,10 @@ class File:
         return subprocess.check_output(["git", "diff", self.path]).decode("utf-8")
 
 
-class Extractor:
+class Extractor():
+    """
+    This class is responsible for extracting information from the repository.
+    """
 
     def __init__(self, path: str, exclude_list: list = []):
         self.base_path = path
