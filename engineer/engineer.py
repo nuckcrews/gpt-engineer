@@ -8,13 +8,20 @@ from .utils import announce, error
 __all__ = ["Workspace", "Engineer"]
 
 
-class Workspace():
+class Workspace:
     """
     This class represents the workspace for the Engineer tool.
     It contains all the necessary information about the repository.
     """
 
-    def __init__(self, path: str, goal: str, repo_name: str, repo_description: str, exclude_list = []):
+    def __init__(
+        self,
+        path: str,
+        goal: str,
+        repo_name: str,
+        repo_description: str,
+        exclude_list=[],
+    ):
         self.path = path
         self.goal = goal
         self.repo_name = repo_name
@@ -22,7 +29,7 @@ class Workspace():
         self.exclude_list = exclude_list
 
 
-class Engineer():
+class Engineer:
     """
     This class represents the Engineer tool.
     It contains the logic for scanning the codebase and making the necessary edits.
@@ -72,7 +79,7 @@ class Engineer():
             lines = editable_file.readlines()
 
         line_adjustment = 0
-        for change in sorted(changes, key=lambda x: x['line']):
+        for change in sorted(changes, key=lambda x: x["line"]):
             line_number = change["line"] - 1 + line_adjustment
             content = change["content"]
             change_type = change["type"]
@@ -85,6 +92,9 @@ class Engineer():
                 line_adjustment += 1
             elif change_type == "edit":
                 lines[line_number] = content + "\n"
+
+        with open(file.path, "w") as editable_file:
+            editable_file.writelines(lines)
 
     def _messages(self, file: File):
         system_messages = [
