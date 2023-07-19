@@ -9,7 +9,7 @@ __all__ = ["Code", "CodeExtractor"]
 
 class Code():
     """
-    The Code class represents a single code file. It contains the file path, the language of the code, and the content of the code file.
+    The Code class represents a single snippet from a file. It contains the file path, the language of the code, and the content of the code snippet.
     """
 
     def __init__(self, file_path: str, language: Language, content: str):
