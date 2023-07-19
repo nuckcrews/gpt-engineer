@@ -8,6 +8,9 @@ __all__ = ["Code", "CodeExtractor"]
 
 
 class Code():
+    """
+    The Code class represents a single code file. It contains the file path, the language of the code, and the content of the code file.
+    """
 
     def __init__(self, file_path: str, language: Language, content: str):
         self.file_path = file_path
@@ -16,6 +19,9 @@ class Code():
 
 
 class CodeExtractor():
+    """
+    The CodeExtractor class is used to extract code from a given path. It can handle both directories and individual files. If a directory is provided, it will recursively extract code from all files in the directory and its subdirectories. Files can be excluded from extraction by adding them to the exclude_list.
+    """
 
     def __init__(self, path: str, exclude_list: list = []):
         self.base_path = path
