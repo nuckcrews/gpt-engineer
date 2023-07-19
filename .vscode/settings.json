@@ -4,6 +4,7 @@
         "cmds",
         "dotenv",
         "GPTOP",
+        "langchain",
         "venv",
         "virt",
         "virtualenv"

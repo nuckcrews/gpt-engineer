@@ -67,7 +67,7 @@ class Engineer():
         :param changes: A list of dictionaries representing the changes to make to the file.
         :return: None
         """
-        print(changes)
+        print("Changes:", changes)
         with open(file.path, "r") as editable_file:
             lines = editable_file.readlines()
 
