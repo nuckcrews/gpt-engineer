@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from openai.embeddings_utils import get_embedding, cosine_similarity
 from .extract import Extractor, File
+from .code import CodeExtractor, Code
 from .utils import announce
 
 __all__ = [
@@ -22,22 +23,27 @@ class Work():
 
 class Memory():
 
-    def __init__(self, extractor: Extractor):
+    def __init__(self, extractor: Extractor, codeExtractor: CodeExtractor):
         """This class represents the memory of the system, storing completed work and embeddings."""
         self.extractor = extractor
+        self.codeExtractor = codeExtractor
         self.completed_work = []
         self.embed()
 
     def embed(self):
-        announce("Embedding files...")
+        announce("Embedding code...")
 
         embeddings = []
         def _embed(file):
             embeddings.append(self._embedding(file))
 
-        self.extractor.extract(_embed)
+        def _embed_code(code):
+            embeddings.append(self._code_embedding(code))
 
-        df = pd.DataFrame(embeddings, columns=["path", "name", "embedding"])
+        # self.extractor.extract(_embed)
+        self.codeExtractor.extract(_embed_code)
+
+        df = pd.DataFrame(embeddings, columns=["path", "content", "embedding"])
         df.set_index("path", inplace=True)
         df.to_csv(session_memory_path)
 
@@ -61,6 +67,14 @@ class Memory():
         completed_work_message = {"role": "system", "content": f"Completed work:\n{completed_work_concat}"}
 
         return [relevant_files_message, completed_work_message]
+
+
+    def code_context(self, file: File):
+        relevant_code = self._relevant_code(file)
+        relevant_code_concat = "\n".join([code.vect() for code in relevant_code])
+        relevant_code_message = {"role": "system", "content": f"Relevant code:\n{relevant_code_concat}"}
+
+        return [relevant_code_message]
 
     def _embedding(self, file: File):
         embedding = get_embedding(
@@ -92,3 +106,28 @@ class Memory():
                 Extractor(path).extract(_add_file)
 
         return files
+
+    def _code_embedding(self, code: Code):
+        embedding = get_embedding(
+            code.vect(),
+            engine="text-embedding-ada-002",
+            max_tokens=8000
+        )
+
+        return {
+            "path": code.path,
+            "language": code.language,
+            "content": code.content,
+            "embedding": embedding
+        }
+
+    def _relevant_code(self, file: File) -> list[Code]:
+        embedding = self.embedding(file)["embedding"]
+        df = pd.read_csv(session_memory_path)
+        df = df[df.path != file.path]
+        df["embedding"] = df.embedding.apply(eval).apply(np.array)
+        df["similarity"] = df.embedding.apply(lambda x: cosine_similarity(x, embedding))
+
+        result = df.sort_values(by="similarity", ascending=False).head(20).tolist()
+
+        return [Code(res["path"], res["language"], res["content"]) for res in result]

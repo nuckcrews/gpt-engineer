@@ -17,6 +17,9 @@ class Code():
         self.language = language
         self.content = content
 
+    def vect(self) -> str:
+        return f"File Path: {self.file_path};\n\n{self.content})"
+
 
 class CodeExtractor():
     """
@@ -70,7 +73,7 @@ class CodeExtractor():
             return None
         else:
             return RecursiveCharacterTextSplitter(
-                language=language, chunk_size=60, chunk_overlap=0
+                language=language, chunk_size=200, chunk_overlap=0
             )
 
     def _language(self, file_path: str) -> Language:
