@@ -4,7 +4,7 @@ from langchain.text_splitter import (
     Language,
 )
 
-__all__ = ["Code", "CodeExtractor"]
+__all__ = ["Code", "Extractor"]
 
 
 class Code():
@@ -21,9 +21,9 @@ class Code():
         return f"File Path: {self.file_path};\n\n{self.content})"
 
 
-class CodeExtractor():
+class Extractor():
     """
-    The CodeExtractor class is used to extract code from a given path. It can handle both directories and individual files. If a directory is provided, it will recursively extract code from all files in the directory and its subdirectories. Files can be excluded from extraction by adding them to the exclude_list.
+The Extractor class is used to extract content from a given path. It can handle both directories and individual files. If a directory is provided, it will recursively extract content from all files in the directory and its subdirectories. Files can be excluded from extraction by adding them to the exclude_list.
     """
 
     def __init__(self, path: str, exclude_list: list = []):
@@ -50,33 +50,14 @@ class CodeExtractor():
         if any([path.startswith(exclude_item) for exclude_item in self.exclude_list]):
             return
 
-        self._read_file(path, operation=operation)
+self._read_file(path, operation=operation)
 
-    def _read_file(self, path: str, operation) -> str:
-        with open(path, "r") as file:
-            content = file.read()
+def _read_file(self, path: str, operation) -> str:
+with open(path, "r") as file:
+content = file.read()
 
-        docs = self._splitter(path).create_documents([content])
+operation(Code(file_path=path, language=self._language(path), content=content))
 
-        print(docs)
-
-        for doc in docs:
-            operation(
-                Code(
-                    file_path=path,
-                    language=self._language(path),
-                    content=doc.page_content,
-                )
-            )
-
-    def _splitter(self, file_path: str) -> RecursiveCharacterTextSplitter:
-        language = self._language(file_path)
-        if language is None:
-            return None
-        else:
-            return RecursiveCharacterTextSplitter.from_language(
-                language=language, chunk_size=600, chunk_overlap=0
-            )
 
     def _language(self, file_path: str) -> Language:
         extension = file_path.split(".")[-1]

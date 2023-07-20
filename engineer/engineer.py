@@ -32,13 +32,10 @@ class Engineer():
 
     def __init__(self, workspace: Workspace):
         self.workspace = workspace
-        self.extractor = Extractor(
+self.extractor = Extractor(path=workspace.path, exclude_list=workspace.exclude_list, code=True)
             path=workspace.path, exclude_list=workspace.exclude_list
         )
-        self.codeExtractor = CodeExtractor(
-            path=workspace.path, exclude_list=workspace.exclude_list
-        )
-        self.memory = Memory(self.extractor, self.codeExtractor)
+self.memory = Memory(self.extractor)
 
     def execute(self):
         self.extractor.extract(self._refactor)
