@@ -40,6 +40,14 @@ class Extractor():
         else:
             return self._extract_from_file(path=self.base_path, operation=operation)
 
+    def extract_path(self, path, operation):
+        if os.path.isdir(path):
+            return self._extract_from_directory(
+                path=path, operation=operation
+            )
+        else:
+            return self._extract_from_file(path=path, operation=operation)
+
     def _extract_from_directory(self, path: str, operation):
         for filename in os.listdir(path):
             file_path = os.path.join(path, filename)

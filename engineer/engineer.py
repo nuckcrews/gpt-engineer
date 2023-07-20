@@ -41,7 +41,9 @@ class Engineer():
         self.memory = Memory(self.extractor, self.codeExtractor)
 
     def execute(self):
-        self.extractor.extract(self._refactor)
+        file_paths = self._find_relevant_files()
+        for file_path in file_paths:
+            self.extractor.extract_path(file_path, self._refactor)
 
     def _refactor(self, file: File):
         announce(file.path, prefix="Working on: ")
@@ -49,7 +51,7 @@ class Engineer():
         response = ChatCompletion.create(
             model="gpt-4",
             messages=self._messages(file),
-            functions=self._functions(),
+            functions=self._edit_code_functions(),
             temperature=0.1,
         )
 
@@ -121,7 +123,14 @@ class Engineer():
             },
         ]
 
-        memory_messages = self.memory.code_context(file)
+        memory_messages = [
+            {
+                "role": "system",
+                "content": "Relevant code:\n{0}".format(
+                    self.memory.code_context(file)
+                )
+            }
+        ]
 
         user_messages = [
             {"role": "user", "content": f"Goal: {self.workspace.goal}"},
@@ -131,7 +140,7 @@ class Engineer():
 
         return [*system_messages, *memory_messages, *user_messages]
 
-    def _functions(self):
+    def _edit_code_functions(self):
         return [
             {
                 "name": "edit_repo_file",
@@ -164,6 +173,85 @@ class Engineer():
                         },
                     },
                     "required": ["changes"],
+                },
+            }
+        ]
+
+    def _find_relevant_files(self) -> list:
+        announce("Finding relevant code...")
+
+        response = ChatCompletion.create(
+            model="gpt-4",
+            messages=self._relevant_code_messages(),
+            functions=self._find_code_functions(),
+            temperature=0.1,
+        )
+
+        response_message = response["choices"][0]["message"]
+
+        print(response)
+
+        if (
+            response_message.get("function_call")
+            and response_message["function_call"]["name"] == "edit_relevant_files"
+        ):
+            function_args = json.loads(response_message["function_call"]["arguments"])
+            files = function_args["file_paths"]
+            announce(files, prefix="Files to edit: ")
+            return files
+        else:
+            error("No relevant files.")
+            return []
+
+    def _relevant_code_messages(self):
+        system_messages = [
+            {
+                "role": "system",
+                "content": "Given code from a repository, metadata about the repository, and a coding goal to achieve, select the files that should be edited to achieve the goal.",
+            },
+            {
+                "role": "system",
+                "content": "Repository Name: {0}; Repository Description: {1};".format(
+                    self.workspace.repo_name, self.workspace.repo_description
+                ),
+            },
+        ]
+
+        memory_messages = [
+            {
+                "role": "system",
+                "content": "Some code from the repository: {0}".format(
+                    self.memory.goal_code_context(self.workspace.goal)
+                )
+            }
+        ]
+
+        print(memory_messages)
+        user_messages = [
+            {"role": "user", "content": f"Goal: {self.workspace.goal}"},
+            {"role": "user", "content": f"What files should be edited to achieve the goal?"},
+        ]
+
+        return [*system_messages, *memory_messages, *user_messages]
+
+
+    def _find_code_functions(self):
+        return [
+            {
+                "name": "edit_relevant_files",
+                "description": "Edits, removes, or adds content to a files based on the provided paths.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file_paths": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                            },
+                            "description": "A list of the paths of the files to edit.",
+                        },
+                    },
+                    "required": ["file_paths"],
                 },
             }
         ]

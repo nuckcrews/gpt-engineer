@@ -58,8 +58,6 @@ class CodeExtractor():
 
         docs = self._splitter(path).create_documents([content])
 
-        print(docs)
-
         for doc in docs:
             operation(
                 Code(
@@ -75,7 +73,7 @@ class CodeExtractor():
             return None
         else:
             return RecursiveCharacterTextSplitter.from_language(
-                language=language, chunk_size=600, chunk_overlap=0
+                language=language, chunk_size=800, chunk_overlap=0
             )
 
     def _language(self, file_path: str) -> Language:
