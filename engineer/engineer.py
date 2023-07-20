@@ -3,6 +3,8 @@ import json
 import os.path
 from openai import ChatCompletion
 from .extract import Extractor, File
+from .code import CodeExtractor, Code
+from .memory import Memory
 from .utils import announce, error
 
 __all__ = ["Workspace", "Engineer"]
@@ -33,6 +35,10 @@ class Engineer():
         self.extractor = Extractor(
             path=workspace.path, exclude_list=workspace.exclude_list
         )
+        self.codeExtractor = CodeExtractor(
+            path=workspace.path, exclude_list=workspace.exclude_list
+        )
+        self.memory = Memory(self.extractor, self.codeExtractor)
 
     def execute(self):
         self.extractor.extract(self._refactor)
@@ -115,13 +121,15 @@ class Engineer():
             },
         ]
 
+        memory_messages = self.memory.code_context(file)
+
         user_messages = [
             {"role": "user", "content": f"Goal: {self.workspace.goal}"},
             {"role": "user", "content": f"File Name: {file.name}"},
             {"role": "user", "content": file.content},
         ]
 
-        return [*system_messages, *user_messages]
+        return [*system_messages, *memory_messages, *user_messages]
 
     def _functions(self):
         return [

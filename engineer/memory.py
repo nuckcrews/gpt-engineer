@@ -43,8 +43,8 @@ class Memory():
         # self.extractor.extract(_embed)
         self.codeExtractor.extract(_embed_code)
 
-        df = pd.DataFrame(embeddings, columns=["path", "content", "embedding"])
-        df.set_index("path", inplace=True)
+        df = pd.DataFrame(embeddings, columns=["file_path", "language", "content", "embedding"])
+        # df.set_index("path", inplace=True)
         df.to_csv(session_memory_path)
 
         announce("Done embedding files.")
@@ -72,7 +72,7 @@ class Memory():
     def code_context(self, file: File):
         relevant_code = self._relevant_code(file)
         relevant_code_concat = "\n".join([code.vect() for code in relevant_code])
-        relevant_code_message = {"role": "system", "content": f"Relevant code:\n{relevant_code_concat}"}
+        relevant_code_message = {"role": "system", "content": f"Here is some relevant code:\n{relevant_code_concat}"}
 
         return [relevant_code_message]
 
@@ -115,19 +115,19 @@ class Memory():
         )
 
         return {
-            "path": code.path,
+            "file_path": code.file_path,
             "language": code.language,
             "content": code.content,
             "embedding": embedding
         }
 
     def _relevant_code(self, file: File) -> list[Code]:
-        embedding = self.embedding(file)["embedding"]
+        embedding = self._embedding(file)["embedding"]
         df = pd.read_csv(session_memory_path)
-        df = df[df.path != file.path]
+        df = df[df.file_path != file.path]
         df["embedding"] = df.embedding.apply(eval).apply(np.array)
         df["similarity"] = df.embedding.apply(lambda x: cosine_similarity(x, embedding))
 
-        result = df.sort_values(by="similarity", ascending=False).head(20).tolist()
+        result = df.sort_values(by="similarity", ascending=False).head(20).values.tolist()
 
-        return [Code(res["path"], res["language"], res["content"]) for res in result]
+        return [Code(res["file_path"], res["language"], res["content"]) for res in result]
