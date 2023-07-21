@@ -46,20 +46,14 @@ def execute(event, context):
                     goal=goal,
                     bot_name=BOT_NAME,
                     bot_email=BOT_EMAIL,
-                    access_token=ACCESS_TOKEN
-                )
-            )
-            table.update(
-                key_value=user_id,
-                sort_key_value=task_id,
-                attr="task_status",
-                newValue="SUCCESS",
-            )
-        except Exception as e:
-            table.update(
-                key_value=user_id,
-                sort_key_value=task_id,
-                attr="task_status",
-                newValue="ERROR",
-            )
-            raise e
+except Exception as e:
+    task_status = "ERROR"
+    raise e
+finally:
+    table.update(
+        key_value=user_id,
+        sort_key_value=task_id,
+        attr="task_status",
+access_token=ACCESS_TOKEN,
+        newValue=task_status,
+    )
