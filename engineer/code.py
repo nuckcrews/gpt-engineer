@@ -53,19 +53,27 @@ class CodeExtractor():
         self._read_file(path, operation=operation)
 
     def _read_file(self, path: str, operation) -> str:
-        with open(path, "r") as file:
-            content = file.read()
+        try:
+            with open(path, "r") as file:
+                content = file.read()
 
-        docs = self._splitter(path).create_documents([content])
+            splitter = self._splitter(path)
 
-        for doc in docs:
-            operation(
-                Code(
-                    file_path=path,
-                    language=self._language(path),
-                    content=doc.page_content,
+            if splitter is None:
+                return
+
+            docs = splitter.create_documents([content])
+
+            for doc in docs:
+                operation(
+                    Code(
+                        file_path=path,
+                        language=self._language(path),
+                        content=doc.page_content,
+                    )
                 )
-            )
+        except UnicodeDecodeError:
+            return
 
     def _splitter(self, file_path: str) -> RecursiveCharacterTextSplitter:
         language = self._language(file_path)

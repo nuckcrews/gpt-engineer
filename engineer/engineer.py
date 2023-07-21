@@ -185,7 +185,7 @@ class Engineer():
         response = ChatCompletion.create(
             model="gpt-4",
             messages=self._relevant_code_messages(),
-            functions=self._set_file_goals_functions(),
+            functions=self._set_file_instructions_functions(),
             temperature=0.1,
         )
 
@@ -193,7 +193,7 @@ class Engineer():
 
         if (
             response_message.get("function_call")
-            and response_message["function_call"]["name"] == "set_file_goals"
+            and response_message["function_call"]["name"] == "set_file_instructions"
         ):
             function_args = json.loads(response_message["function_call"]["arguments"])
             files = function_args["files"]
@@ -226,17 +226,17 @@ class Engineer():
 
         user_messages = [
             {"role": "user", "content": f"Goal: {self.workspace.goal}"},
-            {"role": "user", "content": f"What files should be edited to achieve the goal and how?"},
+            {"role": "user", "content": f"Select the files to edit and instruct how to edit them according to the goal."},
         ]
 
         return [*system_messages, *memory_messages, *user_messages]
 
 
-    def _set_file_goals_functions(self):
+    def _set_file_instructions_functions(self):
         return [
             {
-                "name": "set_file_goals",
-                "description": "Sets the goal for a list of files that should be edited.",
+                "name": "set_file_instructions",
+                "description": "Sets the instructions for a list of files that should be edited.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -256,7 +256,7 @@ class Engineer():
                                 },
                                 "required": ["path", "goal"],
                             },
-                            "description": "A list of the paths of the files to edit and their instructions.",
+                            "description": "A list of the paths of the files to edit and the instructions to edit them.",
                         },
                     },
                     "required": ["files"],
