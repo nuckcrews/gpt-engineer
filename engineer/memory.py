@@ -130,7 +130,7 @@ class Memory:
 
         return files
 
-    def _relevant_code(self, file: File) -> list[Code]:
+    def _relevant_code(self, file: File) -> list:
         embedding = self._file_embedding(file)["embedding"]
         df = pd.read_csv(session_memory_path)
         df = df[df.file_path != file.path]
@@ -145,7 +145,7 @@ class Memory:
             Code(res["file_path"], res["language"], res["content"]) for res in result
         ]
 
-    def _goal_code(self, goal: str) -> list[Code]:
+    def _goal_code(self, goal: str) -> list:
         embedding = self._embedding(f"Goal: {goal}")["embedding"]
         df = pd.read_csv(session_memory_path)
         df["embedding"] = df.embedding.apply(eval).apply(np.array)
