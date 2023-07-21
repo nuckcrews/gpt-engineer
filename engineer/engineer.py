@@ -41,16 +41,18 @@ class Engineer():
         self.memory = Memory(self.extractor, self.codeExtractor)
 
     def execute(self):
-        file_paths = self._find_relevant_files()
-        for file_path in file_paths:
-            self.extractor.extract_path(file_path, self._refactor)
+        edit_files = self._find_relevant_files()
+        for edit_file in edit_files:
+            def refactor(file: File):
+                self._refactor(file, edit_file["instructions"])
+            self.extractor.extract_path(edit_file["path"], refactor)
 
-    def _refactor(self, file: File):
+    def _refactor(self, file: File, goal: str):
         announce(file.path, prefix="Working on: ")
 
         response = ChatCompletion.create(
             model="gpt-4",
-            messages=self._messages(file),
+            messages=self._messages(file, goal),
             functions=self._edit_code_functions(),
             temperature=0.1,
         )
@@ -75,7 +77,7 @@ class Engineer():
         :param changes: A list of dictionaries representing the changes to make to the file.
         :return: None
         """
-        print("Changes:", changes)
+        print("Changes to file:", changes)
         with open(file.path, "r") as editable_file:
             lines = editable_file.readlines()
 
@@ -105,15 +107,15 @@ class Engineer():
         with open(file.path, "w") as editable_file:
             editable_file.writelines(lines)
 
-    def _messages(self, file: File):
+    def _messages(self, file: File, goal):
         system_messages = [
             {
                 "role": "system",
-                "content": "Given content from a file in the repository and other metadata about the repository, re-write it to work towards the provided goal.",
+                "content": "Given content from a file in the repository and other metadata about the repository, re-write it to work towards the provided goal for that file.",
             },
             {
                 "role": "system",
-                "content": "Be sure to maintain correct indentation and style. Ensure the code is syntactically correct and valid.",
+                "content": "Be sure to have correct indentation and style. Ensure the code is syntactically correct and valid.",
             },
             {
                 "role": "system",
@@ -126,14 +128,14 @@ class Engineer():
         memory_messages = [
             {
                 "role": "system",
-                "content": "Relevant code:\n{0}".format(
+                "content": "Relevant code from other files:\n{0}".format(
                     self.memory.code_context(file)
                 )
             }
         ]
 
         user_messages = [
-            {"role": "user", "content": f"Goal: {self.workspace.goal}"},
+            {"role": "user", "content": f"File goal: {goal}"},
             {"role": "user", "content": f"File Name: {file.name}"},
             {"role": "user", "content": file.content},
         ]
@@ -183,21 +185,19 @@ class Engineer():
         response = ChatCompletion.create(
             model="gpt-4",
             messages=self._relevant_code_messages(),
-            functions=self._find_code_functions(),
+            functions=self._set_file_goals_functions(),
             temperature=0.1,
         )
 
         response_message = response["choices"][0]["message"]
 
-        print(response)
-
         if (
             response_message.get("function_call")
-            and response_message["function_call"]["name"] == "edit_relevant_files"
+            and response_message["function_call"]["name"] == "set_file_goals"
         ):
             function_args = json.loads(response_message["function_call"]["arguments"])
-            files = function_args["file_paths"]
-            announce(files, prefix="Files to edit: ")
+            files = function_args["files"]
+            print(f"Files to edit: {files}")
             return files
         else:
             error("No relevant files.")
@@ -207,7 +207,7 @@ class Engineer():
         system_messages = [
             {
                 "role": "system",
-                "content": "Given code from a repository, metadata about the repository, and a coding goal to achieve, select the files that should be edited to achieve the goal.",
+                "content": "Given code from a repository, metadata about the repository, and a coding goal to achieve, select the files that should be edited to achieve the goal and provide instructions for how the file should be edited.",
             },
             {
                 "role": "system",
@@ -220,38 +220,46 @@ class Engineer():
         memory_messages = [
             {
                 "role": "system",
-                "content": "Some code from the repository: {0}".format(
-                    self.memory.goal_code_context(self.workspace.goal)
-                )
+                "content": f"Some code from the repository: {self.memory.goal_code_context(self.workspace.goal)}"
             }
         ]
 
-        print(memory_messages)
         user_messages = [
             {"role": "user", "content": f"Goal: {self.workspace.goal}"},
-            {"role": "user", "content": f"What files should be edited to achieve the goal?"},
+            {"role": "user", "content": f"What files should be edited to achieve the goal and how?"},
         ]
 
         return [*system_messages, *memory_messages, *user_messages]
 
 
-    def _find_code_functions(self):
+    def _set_file_goals_functions(self):
         return [
             {
-                "name": "edit_relevant_files",
-                "description": "Edits, removes, or adds content to a files based on the provided paths.",
+                "name": "set_file_goals",
+                "description": "Sets the goal for a list of files that should be edited.",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "file_paths": {
+                        "files": {
                             "type": "array",
                             "items": {
-                                "type": "string",
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string",
+                                        "description": "The path of the file to edit.",
+                                    },
+                                    "instructions": {
+                                        "type": "string",
+                                        "description": "Instructions for how to edit the file.",
+                                    },
+                                },
+                                "required": ["path", "goal"],
                             },
-                            "description": "A list of the paths of the files to edit.",
+                            "description": "A list of the paths of the files to edit and their instructions.",
                         },
                     },
-                    "required": ["file_paths"],
+                    "required": ["files"],
                 },
             }
         ]

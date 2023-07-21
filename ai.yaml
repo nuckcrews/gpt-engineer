@@ -1,6 +1,6 @@
 name: GPT Engineer
 
-description: A CLI command tool that scans your codebase and edits the files based on the goals you provide it.
+description: A CLI command tool that scans your codebase and edits the files based on the goals you provide it. Standard indentation is 4 spaces.
 
 languages:
 - python
