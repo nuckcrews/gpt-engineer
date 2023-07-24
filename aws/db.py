@@ -17,11 +17,20 @@ class DBTable:
     def put(self, item):
         self.table.put_item(Item=item)
 
-    def update(self, key_value, sort_key_value, attr, newValue):
+
+    def update(self, key_value, sort_key_value, attrs):
+        update_expression = "SET "
+        expression_attribute_values = {}
+        for key, value in attrs.items():
+            update_expression += f"{key} = :{key}, "
+            expression_attribute_values[f":{key}"] = value
+
+        update_expression = update_expression[:-2]
+
         self.table.update_item(
             Key={self.partition_key: key_value, self.sort_key: sort_key_value},
-            UpdateExpression="SET " + attr + " = :val1",
-            ExpressionAttributeValues={":val1": newValue},
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values,
         )
 
     def get(self, key_value, sort_key_value):
