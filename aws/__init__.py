@@ -1,3 +1,4 @@
-from .db import DBTable
+from .handler import TaskHandler
 
-__all__ = ["DBTable"]
+
+__all__ = ["TaskHandler"]
