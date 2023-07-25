@@ -51,12 +51,17 @@ def execute(event, context):
                     access_token=ACCESS_TOKEN,
                 )
             )
+            
+            link = repository_url.replace(".git", "/compare")
+            link += f"/{base_branch}...{dev_branch}?expand=1"
+
             table.update(
                 key_value=user_id,
                 sort_key_value=task_id,
                 attrs={
                     "task_status": "SUCCESS",
                     "finished_at": datetime.now().isoformat(),
+                    "link": link,
                 },
             )
         except Exception as e:
@@ -66,6 +71,7 @@ def execute(event, context):
                 attrs={
                     "task_status": "ERROR",
                     "finished_at": datetime.now().isoformat(),
+                    "error": str(e)
                 },
             )
             raise e
