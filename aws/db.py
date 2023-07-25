@@ -9,7 +9,7 @@ dynamodb = boto.resource("dynamodb", region_name=REGION)
 
 
 class DBTable:
-def __init__(self, table_name, partition_key, sort_key=None):
+    def __init__(self, table_name, partition_key, sort_key=None):
         """
         Initializes the DBTable class.
 
@@ -22,7 +22,7 @@ def __init__(self, table_name, partition_key, sort_key=None):
         self.partition_key = partition_key
         self.sort_key = sort_key
 
-def put(self, item):
+    def put(self, item):
         """
         Inserts an item into the table. The item is a dictionary where the keys are the attribute names and the values are the attribute values.
 
@@ -32,7 +32,7 @@ def put(self, item):
         self.table.put_item(Item=item)
 
 
-def update(self, key_value, sort_key_value, attrs):
+    def update(self, key_value, sort_key_value, attrs):
         """
         Updates an item in the table.
 
@@ -55,7 +55,7 @@ def update(self, key_value, sort_key_value, attrs):
             ExpressionAttributeValues=expression_attribute_values,
         )
 
-def get(self, key_value, sort_key_value):
+    def get(self, key_value, sort_key_value):
         """
         Retrieves an item from the table.
 
@@ -71,7 +71,7 @@ def get(self, key_value, sort_key_value):
         )
         return r.get("Item")
 
-def delete(self, key_value, sort_key_value):
+    def delete(self, key_value, sort_key_value):
         """
         Deletes an item from the table.
 
@@ -83,7 +83,7 @@ def delete(self, key_value, sort_key_value):
             Key={self.partition_key: key_value, self.sort_key: sort_key_value}
         )
 
-def batch_write(self, items):
+    def batch_write(self, items):
         """
         Inserts multiple items into the table.
 
@@ -94,7 +94,7 @@ def batch_write(self, items):
             for item in items:
                 batch.put_item(Item=item)
 
-def batch_get(self, key_value, sort_key_values):
+    def batch_get(self, key_value, sort_key_values):
         """
         Retrieves multiple items from the table.
 
