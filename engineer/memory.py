@@ -41,10 +41,9 @@ class Memory:
         df = pd.DataFrame(
             embeddings, columns=["file_path", "language", "content", "embedding"]
         )
-        # df.set_index("path", inplace=True)
         df.to_csv(session_memory_path)
 
-        announce("Done embedding files.")
+        announce("Done embedding code.")
 
     def add_work(self, file: File):
         work = Work(file.path, file.diff())

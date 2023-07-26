@@ -1,9 +1,8 @@
-import os
 import json
 import os.path
 from openai import ChatCompletion
 from .extract import Extractor, File
-from .code import CodeExtractor, Code
+from .code import CodeExtractor
 from .memory import Memory
 from .utils import announce, error
 
@@ -77,12 +76,14 @@ class Engineer():
         :param changes: A list of dictionaries representing the changes to make to the file.
         :return: None
         """
-        print("Changes to file:", changes)
         with open(file.path, "r") as editable_file:
             lines = editable_file.readlines()
 
+        changes = sorted(changes, key=lambda x: x['line'])
+        print("Changes to file:", changes)
+
         line_adjustment = 0
-        for change in sorted(changes, key=lambda x: x['line']):
+        for change in changes:
             line_number = change["line"] - 1 + line_adjustment
             content = change["content"]
             change_type = change["type"]
@@ -157,11 +158,11 @@ class Engineer():
                                 "properties": {
                                     "line": {
                                         "type": "integer",
-                                        "description": "The line number to edit, remove, or add content to.",
+                                        "description": "The line number to edit, remove, or add content to. Use the original line number from the file.",
                                     },
                                     "content": {
                                         "type": "string",
-                                        "description": "The content to edit, remove, or add to the line.",
+                                        "description": "The content to edit, remove, or add to the line. Ensure indentation matches the original file.",
                                     },
                                     "type": {
                                         "type": "string",
@@ -197,6 +198,11 @@ class Engineer():
         ):
             function_args = json.loads(response_message["function_call"]["arguments"])
             files = function_args["files"]
+            for file in files:
+                if not file["path"].startswith("/tmp/repo/"):
+                    path = "/tmp/repo/" + file["path"]
+                    file["path"] = path.replace("//", "/")
+
             print(f"Files to edit: {files}")
             return files
         else:
@@ -247,7 +253,7 @@ class Engineer():
                                 "properties": {
                                     "path": {
                                         "type": "string",
-                                        "description": "The path of the file to edit.",
+                                        "description": "The entire path of the file to edit.",
                                     },
                                     "instructions": {
                                         "type": "string",

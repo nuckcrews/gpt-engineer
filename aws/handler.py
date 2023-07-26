@@ -70,6 +70,6 @@ class TaskHandler:
             attrs={
                 "task_status": "ERROR",
                 "finished_at": datetime.now().isoformat(),
-                "error": str(error),
+                "task_error": str(error),
             },
         )
