@@ -1,9 +1,26 @@
-on: []
+on:
+  workflow_dispatch:
+    inputs:
+      base_branch:
+        description: 'The base branch to base the edits on.'
+        required: true
+        default: 'mainline'
+        type: branch
+      dev_branch:
+        description: 'The base branch to base the edits on.'
+        required: true
+        default: 'gpt-eng'
+      path:
+        description: 'The path to scan and make edits in.'
+        required: true
+      goal:
+        description: 'The goal to achieve.'
+        required: true
 
 jobs:
   gpt_engineer_job:
     runs-on: ubuntu-latest
-    name: Runs the GPT Engineer action
+    name: GPT Engineer
     steps:
       - name: Start the engineering task
         id: gpt
