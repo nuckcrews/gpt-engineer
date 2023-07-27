@@ -7,5 +7,8 @@ RUN yum install -y git
 COPY lambda.py ${LAMBDA_TASK_ROOT}
 COPY engineer engineer
 COPY aws aws
+COPY action.sh /action.sh
 
 CMD [ "lambda.execute" ]
+
+ENTRYPOINT ["/action.sh"]

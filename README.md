@@ -50,7 +50,7 @@ If you don’t have Python installed, [install it from here](https://www.python.
 1. Run the application
 
     ```bash
-    $ ./run.sh
+    $ ./cli.sh
     ```
 
 To set up an operation on your machine, please see the [example](https://github.com/ncrews35/gpt-operator/tree/mainline/example).

@@ -1,0 +1,26 @@
+name: 'GPT Engineer'
+description: 'An AI engineer scans your codebase and edits the files based on the goals you provide it.'
+inputs:
+  base_branch:
+    description: 'The base branch to base the edits on.'
+    required: true
+  dev_branch:
+    description: 'The dev branch to edit.'
+    required: true
+  path:
+    description: 'The path to scan and make edits in.'
+    required: true
+  goal:
+    description: 'The goal to achieve.'
+    required: true
+outputs:
+  status:
+    description: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.base_branch }}
+    - ${{ inputs.dev_branch }}
+    - ${{ inputs.path }}
+    - ${{ inputs.goal }}

@@ -8,7 +8,7 @@ __all__ = [
 class RepoConfig():
 
     def __init__(self, path: str):
-        with open(path + "/ai.yaml", 'r') as file:
+        with open(path + "/ai.yml", 'r') as file:
             config = yaml.safe_load(file)
             self.name = config.get("name")
             self.description = config.get("description")
