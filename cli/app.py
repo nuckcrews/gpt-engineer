@@ -1,6 +1,6 @@
 import json
 from engineer.run import Configuration, run
-from engineer.utils import prompt_string, prompt_confirm
+from .utils import prompt_string, prompt_confirm
 
 __all__ = ["main"]
 
