@@ -1,6 +1,9 @@
 name: 'GPT Engineer'
 description: 'An AI engineer scans your codebase and edits the files based on the goals you provide it.'
 inputs:
+  repository_url:
+    description: 'The repository url to scan and make edits in.'
+    required: true
   base_branch:
     description: 'The base branch to base the edits on.'
     required: true
@@ -15,11 +18,12 @@ inputs:
     required: true
 outputs:
   status:
-    description: ''
+    description: 'The status of the action.'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - ${{ inputs.repository_url }}
     - ${{ inputs.base_branch }}
     - ${{ inputs.dev_branch }}
     - ${{ inputs.path }}
