@@ -139,6 +139,7 @@ class Engineer():
             {"role": "user", "content": f"File goal: {goal}"},
             {"role": "user", "content": f"File Name: {file.name}"},
             {"role": "user", "content": file.content},
+            {"role": "user", "content": "Edit the file to achieve the goal but use the same style and indentation as the original file."},
         ]
 
         return [*system_messages, *memory_messages, *user_messages]
