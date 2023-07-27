@@ -1,0 +1,12 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Runs the GPT Engineer action
+    steps:
+      - name: Start the engineering task
+        id: gpt
+        uses: ncrews35/gpt-engineer@0.1
+        with:
+          repository_url: 'https://github.com/ncrews35/gpt-engineer.git'
