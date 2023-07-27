@@ -1,7 +1,7 @@
-on: [push]
+on: []
 
 jobs:
-  hello_world_job:
+  gpt_engineer_job:
     runs-on: ubuntu-latest
     name: Runs the GPT Engineer action
     steps:
