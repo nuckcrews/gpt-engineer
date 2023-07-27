@@ -24,6 +24,6 @@ jobs:
     steps:
       - name: Start the engineering task
         id: gpt
-        uses: ncrews35/gpt-engineer@0.1
+        uses: ncrews35/gpt-engineer@mainline
         with:
           repository_url: 'https://github.com/ncrews35/gpt-engineer.git'
