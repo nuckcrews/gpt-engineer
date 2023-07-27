@@ -21,7 +21,7 @@ outputs:
     description: 'The status of the action.'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'Dockerfile.action'
   args:
     - ${{ inputs.repository_url }}
     - ${{ inputs.base_branch }}
