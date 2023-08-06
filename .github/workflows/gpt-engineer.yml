@@ -29,4 +29,4 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_SHA: ${{ github.sha }}
         with:
-          args: ${{ inputs.dev_branch }} ${{ inputs.path }} ${{ inputs.goal }}
+          args: ${{ inputs.base_branch }} ${{ inputs.dev_branch }} ${{ inputs.path }} ${{ inputs.goal }}
