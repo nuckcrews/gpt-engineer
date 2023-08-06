@@ -25,5 +25,8 @@ jobs:
       - name: Start the engineering task
         id: gpt
         uses: ncrews35/gpt-engineer@mainline
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
         with:
-          repository_url: 'https://github.com/ncrews35/gpt-engineer.git'
+          args: ${{ inputs.dev_branch }} ${{ inputs.path }} ${{ inputs.goal }}
