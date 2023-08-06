@@ -4,6 +4,7 @@ import os
 import action.app as app
 
 if __name__ == "__main__":
+    print("args")
     print(sys.argv)
     repository_url = os.environ.get("GITHUB_REPOSITORY")
     access_token = os.environ.get("GITHUB_PAT")
