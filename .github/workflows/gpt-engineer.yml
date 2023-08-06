@@ -7,7 +7,7 @@ on:
         default: 'mainline'
         type: branch
       dev_branch:
-        description: 'The base branch to base the edits on.'
+        description: 'The development branch to make the edits on.'
         required: true
         default: 'gpt-eng'
       path:
