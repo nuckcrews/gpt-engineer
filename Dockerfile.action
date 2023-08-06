@@ -9,4 +9,4 @@ RUN yum install -y git
 COPY engineer engineer
 COPY action.sh /action.sh
 
-ENTRYPOINT ["/action.sh"]
+RUN action.sh

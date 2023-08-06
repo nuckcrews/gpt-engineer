@@ -1,2 +1,2 @@
-python -m action
+python -m action $@
 echo "Success"
