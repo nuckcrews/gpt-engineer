@@ -18,7 +18,7 @@ on:
         required: true
 
 jobs:
-  gpt_engineer_job:
+  gpt_engineer:
     runs-on: ubuntu-latest
     name: GPT Engineer
     steps:
@@ -27,6 +27,8 @@ jobs:
         uses: ncrews35/gpt-engineer@mainline
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_PAT: ${{ secrets.PAT_TOKEN }}
+          BOT_NAME: 'Bulsai'
+          BOT_EMAIL: 'bot@buls.ai'
         with:
           args: ${{ inputs.base_branch }} ${{ inputs.dev_branch }} ${{ inputs.path }} ${{ inputs.goal }}
