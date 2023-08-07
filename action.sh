@@ -1,5 +1,6 @@
 #!/bin/sh
 
 echo "Running action"
-python -m cli $*
+export PYTHONPATH="./action"
+python -m action $*
 echo "Success"
