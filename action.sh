@@ -1,2 +1,4 @@
-python -m action $@
+#!/bin/sh -l
+
+sh -c "python -m action $*"
 echo "Success"
