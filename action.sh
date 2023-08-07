@@ -1,6 +1,5 @@
 #!/bin/sh
 
 echo "Running action"
-ls
-python action/__main__.py $*
+python -m action $*
 echo "Success"
