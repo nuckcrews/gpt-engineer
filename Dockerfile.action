@@ -6,8 +6,8 @@ COPY action_requirements.txt  .
 RUN  pip3 install -r action_requirements.txt --target "${LAMBDA_TASK_ROOT}"
 RUN yum install -y git
 
-COPY engineer engineer
-COPY action action
+COPY engineer ./engineer
+COPY action ./action
 COPY action.sh /action.sh
 
 ENTRYPOINT ["/action.sh"]
