@@ -32,3 +32,4 @@ jobs:
           BOT_EMAIL: 'bot@buls.ai'
         with:
           args: ${{ inputs.base_branch }} ${{ inputs.dev_branch }} ${{ inputs.path }} ${{ inputs.goal }}
+        working_directory: ${{ github.workspace }}
