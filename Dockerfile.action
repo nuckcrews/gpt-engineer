@@ -1,14 +1,21 @@
 FROM public.ecr.aws/lambda/python:3.9
 
+WORKDIR /app
+
 ENV PIP_ROOT_USER_ACTION=ignore
 
 COPY action_requirements.txt  .
 RUN pip3 install -r action_requirements.txt --target "${LAMBDA_TASK_ROOT}"
 RUN yum install -y git
 
-COPY engineer /engineer
-COPY action /action
-COPY action.sh /action.sh
-RUN export PYTHONPATH=/
+RUN mkdir /app/engineer
+RUN mkdir /app/action
+
+COPY engineer /app/engineer
+COPY action /app/action
+COPY action.sh /app/
+RUN export PYTHONPATH=/app/
+
+RUN dir
 
 ENTRYPOINT ["/action.sh"]
