@@ -1,8 +1,9 @@
 #!/bin/sh
 
+echo "Activating Python environment"
+source activate myenv
+
 echo "Running action"
-# echo out the list files in the current directory
-ls -la
-ls -l
-python -m action $*
+python -m /path/to/action $*
+
 echo "Success"

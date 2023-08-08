@@ -5,7 +5,7 @@
 1. Build docker image
 
    ``` bash
-   $ docker build --platform linux/arm64 -t gpt_engineer_image .
+   $ docker build -f Dockerfile.lambda --platform linux/arm64 -t gpt_engineer_image .
    ```
 
 2. Run docker image

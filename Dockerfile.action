@@ -10,4 +10,4 @@ COPY engineer engineer
 COPY action action
 COPY action.sh /action.sh
 
-CMD [ "python", "action/__main__.py" ]
+ENTRYPOINT ["/action.sh"]
