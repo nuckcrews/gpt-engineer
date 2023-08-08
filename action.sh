@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "Running action"
-python -m /action $*
+export PYTHONPATH=$PYTHONPATH:/path/to/module
+python -m action $*
 
 echo "Success"
