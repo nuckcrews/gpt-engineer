@@ -9,6 +9,5 @@ RUN yum install -y git
 
 COPY engineer engineer
 COPY action action
-COPY action.sh /action.sh
 
 ENTRYPOINT ["python", "-m", "action"]
