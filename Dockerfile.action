@@ -1,6 +1,5 @@
 FROM public.ecr.aws/lambda/python:3.9
 
-WORKDIR /github/workspace
 ENV PIP_ROOT_USER_ACTION=ignore
 
 COPY action_requirements.txt  .
