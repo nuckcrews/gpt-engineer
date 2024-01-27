@@ -14,7 +14,7 @@
 
 ## Setup
 
-If you don’t have Python installed, [install it from here](https://www.python.org/downloads/)
+If you don’t have Python installed, [install it from here](https://www.python.org/downloads/).
 
 1. Clone this repository
 
